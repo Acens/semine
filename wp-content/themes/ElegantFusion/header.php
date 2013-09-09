@@ -70,7 +70,7 @@
 					<?php
 						$et_rss_url = '' != et_get_option( 'fusion_rss_url' ) ? et_get_option( 'fusion_rss_url' ) : get_bloginfo( 'comments_rss2_url' );
 						if ( 'on' == et_get_option( 'fusion_show_twitter_icon', 'on' ) ) $social_icons['twitter'] = array( 'image' => $template_directory_uri . '/images/twitter.png', 'url' => et_get_option( 'fusion_twitter_url' ), 'alt' => __( 'Twitter', 'Fusion' ) );
-						if ( 'on' == et_get_option( 'fusion_show_rss_icon', 'on' ) ) $social_icons['rss'] = array( 'image' => $template_directory_uri . '/images/rss.png', 'url' => $et_rss_url, 'alt' => __( 'Rss', 'Fusion' ) );
+						if ( 'on' == et_get_option( 'fusion_show_rss_icon', 'on' ) ) $social_icons['rss'] = array( 'image' => $template_directory_uri . '/images/youtube.png', 'url' => $et_rss_url, 'alt' => __( 'Rss', 'Fusion' ) );
 						if ( 'on' == et_get_option( 'fusion_show_facebook_icon','on' ) ) $social_icons['facebook'] = array( 'image' => $template_directory_uri . '/images/facebook.png', 'url' => et_get_option( 'fusion_facebook_url' ), 'alt' => __( 'Facebook', 'Fusion' ) );
 
 						$social_icons = apply_filters( 'et_social_icons', $social_icons );
