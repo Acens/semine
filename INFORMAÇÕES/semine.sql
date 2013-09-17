@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Máquina: 127.0.0.1
--- Data de Criação: 17-Set-2013 às 16:08
+-- Data de Criação: 17-Set-2013 às 17:47
 -- Versão do servidor: 5.5.32
 -- versão do PHP: 5.4.19
 
@@ -21,6 +21,69 @@ SET time_zone = "+00:00";
 --
 CREATE DATABASE IF NOT EXISTS `semine` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `semine`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_aec_event`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_aec_event` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `repeat_freq` tinyint(4) unsigned DEFAULT '0',
+  `repeat_int` tinyint(4) unsigned DEFAULT '0',
+  `repeat_end` date DEFAULT NULL,
+  `allDay` tinyint(1) unsigned DEFAULT '0',
+  `category_id` tinyint(4) unsigned NOT NULL,
+  `description` varchar(2500) DEFAULT NULL,
+  `link` varchar(2000) DEFAULT NULL,
+  `venue` varchar(100) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
+  `contact` varchar(50) DEFAULT NULL,
+  `contact_info` varchar(50) DEFAULT NULL,
+  `access` tinyint(1) unsigned DEFAULT '0',
+  `rsvp` tinyint(1) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Extraindo dados da tabela `wp_aec_event`
+--
+
+INSERT INTO `wp_aec_event` (`id`, `user_id`, `title`, `start`, `end`, `repeat_freq`, `repeat_int`, `repeat_end`, `allDay`, `category_id`, `description`, `link`, `venue`, `address`, `city`, `state`, `zip`, `country`, `contact`, `contact_info`, `access`, `rsvp`) VALUES
+(1, 0, 'Ajax Event Calendar [v1.0.4] successfully installed!', '2013-09-17 00:00:00', '2013-09-17 00:00:00', 0, 0, '2013-09-17', 1, 1, 'Ajax Event Calendar WordPress Plugin is a fully localized (including RTL language support) community calendar that allows authorized users to add, edit, copy, move, resize and delete events into custom categories.  Highly customized calendars can be added to pages, posts or text widgets using the <strong>[calendar]</strong> shortcode.  Similarly, a list view of events can be added using the <strong>[eventlist]</strong> shortcode.  Click on the event link to learn about available the shortcode options.', 'http://wordpress.org/extend/plugins/ajax-event-calendar/', 'Cloud Gate "The Bean"', '201 East Randolph Street', 'Chicago', 'Illinois', '60601-6530', 'United States', 'Eran Miller', '123-123-1234', 1, 0),
+(2, 1, 'Semine', '2013-10-01 00:00:00', '2013-10-08 00:00:00', 0, 0, '2013-10-08', 1, 1, 'Semine inova', '', 'Semine', 'asf', 'fsd', 'fd', 'fd', '', 'Elton', 'naosei', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_aec_event_category`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_aec_event_category` (
+  `id` tinyint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `category` varchar(25) NOT NULL,
+  `bgcolor` char(6) NOT NULL,
+  `fgcolor` char(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Extraindo dados da tabela `wp_aec_event_category`
+--
+
+INSERT INTO `wp_aec_event_category` (`id`, `category`, `bgcolor`, `fgcolor`) VALUES
+(1, 'Event', '517ed6', 'FFFFFF'),
+(2, 'Deadline', 'e3686c', 'FFFFFF'),
+(3, 'Volunteer', '8fc9b0', 'FFFFFF');
 
 -- --------------------------------------------------------
 
@@ -81,6 +144,179 @@ CREATE TABLE IF NOT EXISTS `wp_comments` (
 
 INSERT INTO `wp_comments` (`comment_ID`, `comment_post_ID`, `comment_author`, `comment_author_email`, `comment_author_url`, `comment_author_IP`, `comment_date`, `comment_date_gmt`, `comment_content`, `comment_karma`, `comment_approved`, `comment_agent`, `comment_type`, `comment_parent`, `user_id`) VALUES
 (1, 1, 'Sr. WordPress', '', 'http://wordpress.org/', '', '2013-08-20 10:18:23', '2013-08-20 10:18:23', 'Olá, Isto é um comentário.\nPara excluir um comentário, faça o login e veja os comentários de posts. Lá você terá a opção de editá-los ou excluí-los.', 0, 'trash', '', '', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_bookings`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_bookings` (
+  `booking_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` bigint(20) unsigned NOT NULL,
+  `person_id` bigint(20) unsigned NOT NULL,
+  `booking_spaces` int(5) NOT NULL,
+  `booking_comment` text,
+  `booking_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `booking_status` tinyint(1) NOT NULL DEFAULT '1',
+  `booking_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+  `booking_tax_rate` decimal(5,2) DEFAULT NULL,
+  `booking_taxes` decimal(10,2) DEFAULT NULL,
+  `booking_meta` longtext,
+  PRIMARY KEY (`booking_id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_events`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_events` (
+  `event_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` bigint(20) unsigned NOT NULL,
+  `event_slug` varchar(200) DEFAULT NULL,
+  `event_owner` bigint(20) unsigned DEFAULT NULL,
+  `event_status` int(1) DEFAULT NULL,
+  `event_name` text,
+  `event_start_time` time DEFAULT NULL,
+  `event_end_time` time DEFAULT NULL,
+  `event_all_day` int(1) DEFAULT NULL,
+  `event_start_date` date DEFAULT NULL,
+  `event_end_date` date DEFAULT NULL,
+  `post_content` longtext,
+  `event_rsvp` tinyint(1) NOT NULL DEFAULT '0',
+  `event_rsvp_date` date DEFAULT NULL,
+  `event_rsvp_time` time DEFAULT NULL,
+  `event_rsvp_spaces` int(5) DEFAULT NULL,
+  `event_spaces` int(5) DEFAULT '0',
+  `event_private` tinyint(1) NOT NULL DEFAULT '0',
+  `location_id` bigint(20) unsigned DEFAULT NULL,
+  `recurrence_id` bigint(20) unsigned DEFAULT NULL,
+  `event_category_id` bigint(20) unsigned DEFAULT NULL,
+  `event_attributes` text,
+  `event_date_created` datetime DEFAULT NULL,
+  `event_date_modified` datetime DEFAULT NULL,
+  `recurrence` tinyint(1) NOT NULL DEFAULT '0',
+  `recurrence_interval` int(4) DEFAULT NULL,
+  `recurrence_freq` tinytext,
+  `recurrence_byday` tinytext,
+  `recurrence_byweekno` int(4) DEFAULT NULL,
+  `recurrence_days` int(4) DEFAULT NULL,
+  `blog_id` bigint(20) unsigned DEFAULT NULL,
+  `group_id` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`event_id`),
+  KEY `event_status` (`event_status`),
+  KEY `post_id` (`post_id`),
+  KEY `blog_id` (`blog_id`),
+  KEY `group_id` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `wp_em_events`
+--
+
+INSERT INTO `wp_em_events` (`event_id`, `post_id`, `event_slug`, `event_owner`, `event_status`, `event_name`, `event_start_time`, `event_end_time`, `event_all_day`, `event_start_date`, `event_end_date`, `post_content`, `event_rsvp`, `event_rsvp_date`, `event_rsvp_time`, `event_rsvp_spaces`, `event_spaces`, `event_private`, `location_id`, `recurrence_id`, `event_category_id`, `event_attributes`, `event_date_created`, `event_date_modified`, `recurrence`, `recurrence_interval`, `recurrence_freq`, `recurrence_byday`, `recurrence_byweekno`, `recurrence_days`, `blog_id`, `group_id`) VALUES
+(1, 50, 'semine', 1, 1, 'Semine', '00:00:00', '00:00:00', 1, '2013-10-01', '2013-10-08', NULL, 1, NULL, '00:00:00', 0, 900, 0, 0, NULL, NULL, 'a:0:{}', '2013-09-17 15:38:17', NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_locations`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_locations` (
+  `location_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` bigint(20) unsigned NOT NULL,
+  `blog_id` bigint(20) unsigned DEFAULT NULL,
+  `location_slug` varchar(200) DEFAULT NULL,
+  `location_name` text,
+  `location_owner` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `location_address` varchar(200) DEFAULT NULL,
+  `location_town` varchar(200) DEFAULT NULL,
+  `location_state` varchar(200) DEFAULT NULL,
+  `location_postcode` varchar(10) DEFAULT NULL,
+  `location_region` varchar(200) DEFAULT NULL,
+  `location_country` char(2) DEFAULT NULL,
+  `location_latitude` float(10,6) DEFAULT NULL,
+  `location_longitude` float(10,6) DEFAULT NULL,
+  `post_content` longtext,
+  `location_status` int(1) DEFAULT NULL,
+  `location_private` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`location_id`),
+  KEY `location_state` (`location_state`),
+  KEY `location_region` (`location_region`),
+  KEY `location_country` (`location_country`),
+  KEY `post_id` (`post_id`),
+  KEY `blog_id` (`blog_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_meta`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_meta` (
+  `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `object_id` bigint(20) unsigned NOT NULL,
+  `meta_key` varchar(255) DEFAULT NULL,
+  `meta_value` longtext,
+  `meta_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`meta_id`),
+  KEY `object_id` (`object_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_tickets`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_tickets` (
+  `ticket_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` bigint(20) unsigned NOT NULL,
+  `ticket_name` tinytext NOT NULL,
+  `ticket_description` text,
+  `ticket_price` decimal(10,2) DEFAULT NULL,
+  `ticket_start` datetime DEFAULT NULL,
+  `ticket_end` datetime DEFAULT NULL,
+  `ticket_min` int(10) DEFAULT NULL,
+  `ticket_max` int(10) DEFAULT NULL,
+  `ticket_spaces` int(11) DEFAULT NULL,
+  `ticket_members` int(1) DEFAULT NULL,
+  `ticket_members_roles` longtext,
+  `ticket_guests` int(1) DEFAULT NULL,
+  `ticket_required` int(1) DEFAULT NULL,
+  PRIMARY KEY (`ticket_id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `wp_em_tickets`
+--
+
+INSERT INTO `wp_em_tickets` (`ticket_id`, `event_id`, `ticket_name`, `ticket_description`, `ticket_price`, `ticket_start`, `ticket_end`, `ticket_min`, `ticket_max`, `ticket_spaces`, `ticket_members`, `ticket_members_roles`, `ticket_guests`, `ticket_required`) VALUES
+(1, 1, 'Ingresso padrão', NULL, '10.00', '2013-09-16 00:00:00', '2013-09-30 00:00:00', NULL, NULL, 10, 0, NULL, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `wp_em_tickets_bookings`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_em_tickets_bookings` (
+  `ticket_booking_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `booking_id` bigint(20) unsigned NOT NULL,
+  `ticket_id` bigint(20) unsigned NOT NULL,
+  `ticket_booking_spaces` int(6) NOT NULL,
+  `ticket_booking_price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`ticket_booking_id`),
+  KEY `booking_id` (`booking_id`),
+  KEY `ticket_id` (`ticket_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -334,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `wp_options` (
   `autoload` varchar(20) NOT NULL DEFAULT 'yes',
   PRIMARY KEY (`option_id`),
   UNIQUE KEY `option_name` (`option_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=529 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=862 ;
 
 --
 -- Extraindo dados da tabela `wp_options`
@@ -375,7 +611,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (32, 'hack_file', '0', 'yes'),
 (33, 'blog_charset', 'UTF-8', 'yes'),
 (34, 'moderation_keys', '', 'no'),
-(35, 'active_plugins', 'a:3:{i:0;s:53:"codestyling-localization/codestyling-localization.php";i:1;s:30:"event-registration/EVNTREG.php";i:2;s:28:"wysija-newsletters/index.php";}', 'yes'),
+(35, 'active_plugins', 'a:3:{i:0;s:53:"codestyling-localization/codestyling-localization.php";i:2;s:33:"events-manager/events-manager.php";i:3;s:28:"wysija-newsletters/index.php";}', 'yes'),
 (36, 'home', 'http://localhost/semine', 'yes'),
 (37, 'category_base', '', 'yes'),
 (38, 'ping_sites', 'http://rpc.pingomatic.com/', 'yes'),
@@ -432,7 +668,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (89, 'default_post_format', '0', 'yes'),
 (90, 'link_manager_enabled', '0', 'yes'),
 (91, 'initial_db_version', '24448', 'yes'),
-(92, 'wp_user_roles', 'a:5:{s:13:"administrator";a:2:{s:4:"name";s:13:"Administrator";s:12:"capabilities";a:67:{s:13:"switch_themes";b:1;s:11:"edit_themes";b:1;s:16:"activate_plugins";b:1;s:12:"edit_plugins";b:1;s:10:"edit_users";b:1;s:10:"edit_files";b:1;s:14:"manage_options";b:1;s:17:"moderate_comments";b:1;s:17:"manage_categories";b:1;s:12:"manage_links";b:1;s:12:"upload_files";b:1;s:6:"import";b:1;s:15:"unfiltered_html";b:1;s:10:"edit_posts";b:1;s:17:"edit_others_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:10:"edit_pages";b:1;s:4:"read";b:1;s:8:"level_10";b:1;s:7:"level_9";b:1;s:7:"level_8";b:1;s:7:"level_7";b:1;s:7:"level_6";b:1;s:7:"level_5";b:1;s:7:"level_4";b:1;s:7:"level_3";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:17:"edit_others_pages";b:1;s:20:"edit_published_pages";b:1;s:13:"publish_pages";b:1;s:12:"delete_pages";b:1;s:19:"delete_others_pages";b:1;s:22:"delete_published_pages";b:1;s:12:"delete_posts";b:1;s:19:"delete_others_posts";b:1;s:22:"delete_published_posts";b:1;s:20:"delete_private_posts";b:1;s:18:"edit_private_posts";b:1;s:18:"read_private_posts";b:1;s:20:"delete_private_pages";b:1;s:18:"edit_private_pages";b:1;s:18:"read_private_pages";b:1;s:12:"delete_users";b:1;s:12:"create_users";b:1;s:17:"unfiltered_upload";b:1;s:14:"edit_dashboard";b:1;s:14:"update_plugins";b:1;s:14:"delete_plugins";b:1;s:15:"install_plugins";b:1;s:13:"update_themes";b:1;s:14:"install_themes";b:1;s:11:"update_core";b:1;s:10:"list_users";b:1;s:12:"remove_users";b:1;s:9:"add_users";b:1;s:13:"promote_users";b:1;s:18:"edit_theme_options";b:1;s:13:"delete_themes";b:1;s:6:"export";b:1;s:18:"wysija_newsletters";b:1;s:18:"wysija_subscribers";b:1;s:13:"wysija_config";b:1;s:16:"wysija_theme_tab";b:1;s:16:"wysija_style_tab";b:1;}}s:6:"editor";a:2:{s:4:"name";s:6:"Editor";s:12:"capabilities";a:36:{s:17:"moderate_comments";b:1;s:17:"manage_categories";b:1;s:12:"manage_links";b:1;s:12:"upload_files";b:1;s:15:"unfiltered_html";b:1;s:10:"edit_posts";b:1;s:17:"edit_others_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:10:"edit_pages";b:1;s:4:"read";b:1;s:7:"level_7";b:1;s:7:"level_6";b:1;s:7:"level_5";b:1;s:7:"level_4";b:1;s:7:"level_3";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:17:"edit_others_pages";b:1;s:20:"edit_published_pages";b:1;s:13:"publish_pages";b:1;s:12:"delete_pages";b:1;s:19:"delete_others_pages";b:1;s:22:"delete_published_pages";b:1;s:12:"delete_posts";b:1;s:19:"delete_others_posts";b:1;s:22:"delete_published_posts";b:1;s:20:"delete_private_posts";b:1;s:18:"edit_private_posts";b:1;s:18:"read_private_posts";b:1;s:20:"delete_private_pages";b:1;s:18:"edit_private_pages";b:1;s:18:"read_private_pages";b:1;s:18:"wysija_newsletters";b:1;s:18:"wysija_subscribers";b:1;}}s:6:"author";a:2:{s:4:"name";s:6:"Author";s:12:"capabilities";a:10:{s:12:"upload_files";b:1;s:10:"edit_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:4:"read";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:12:"delete_posts";b:1;s:22:"delete_published_posts";b:1;}}s:11:"contributor";a:2:{s:4:"name";s:11:"Contributor";s:12:"capabilities";a:5:{s:10:"edit_posts";b:1;s:4:"read";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:12:"delete_posts";b:1;}}s:10:"subscriber";a:2:{s:4:"name";s:10:"Subscriber";s:12:"capabilities";a:2:{s:4:"read";b:1;s:7:"level_0";b:1;}}}', 'yes'),
+(92, 'wp_user_roles', 'a:6:{s:13:"administrator";a:2:{s:4:"name";s:13:"Administrator";s:12:"capabilities";a:93:{s:13:"switch_themes";b:1;s:11:"edit_themes";b:1;s:16:"activate_plugins";b:1;s:12:"edit_plugins";b:1;s:10:"edit_users";b:1;s:10:"edit_files";b:1;s:14:"manage_options";b:1;s:17:"moderate_comments";b:1;s:17:"manage_categories";b:1;s:12:"manage_links";b:1;s:12:"upload_files";b:1;s:6:"import";b:1;s:15:"unfiltered_html";b:1;s:10:"edit_posts";b:1;s:17:"edit_others_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:10:"edit_pages";b:1;s:4:"read";b:1;s:8:"level_10";b:1;s:7:"level_9";b:1;s:7:"level_8";b:1;s:7:"level_7";b:1;s:7:"level_6";b:1;s:7:"level_5";b:1;s:7:"level_4";b:1;s:7:"level_3";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:17:"edit_others_pages";b:1;s:20:"edit_published_pages";b:1;s:13:"publish_pages";b:1;s:12:"delete_pages";b:1;s:19:"delete_others_pages";b:1;s:22:"delete_published_pages";b:1;s:12:"delete_posts";b:1;s:19:"delete_others_posts";b:1;s:22:"delete_published_posts";b:1;s:20:"delete_private_posts";b:1;s:18:"edit_private_posts";b:1;s:18:"read_private_posts";b:1;s:20:"delete_private_pages";b:1;s:18:"edit_private_pages";b:1;s:18:"read_private_pages";b:1;s:12:"delete_users";b:1;s:12:"create_users";b:1;s:17:"unfiltered_upload";b:1;s:14:"edit_dashboard";b:1;s:14:"update_plugins";b:1;s:14:"delete_plugins";b:1;s:15:"install_plugins";b:1;s:13:"update_themes";b:1;s:14:"install_themes";b:1;s:11:"update_core";b:1;s:10:"list_users";b:1;s:12:"remove_users";b:1;s:9:"add_users";b:1;s:13:"promote_users";b:1;s:18:"edit_theme_options";b:1;s:13:"delete_themes";b:1;s:6:"export";b:1;s:18:"wysija_newsletters";b:1;s:18:"wysija_subscribers";b:1;s:13:"wysija_config";b:1;s:16:"wysija_theme_tab";b:1;s:16:"wysija_style_tab";b:1;s:14:"aec_add_events";b:1;s:17:"aec_manage_events";b:1;s:19:"aec_manage_calendar";b:1;s:14:"publish_events";b:1;s:20:"delete_others_events";b:1;s:18:"edit_others_events";b:1;s:22:"manage_others_bookings";b:1;s:24:"publish_recurring_events";b:1;s:30:"delete_others_recurring_events";b:1;s:28:"edit_others_recurring_events";b:1;s:17:"publish_locations";b:1;s:23:"delete_others_locations";b:1;s:16:"delete_locations";b:1;s:21:"edit_others_locations";b:1;s:23:"delete_event_categories";b:1;s:21:"edit_event_categories";b:1;s:15:"manage_bookings";b:1;s:19:"upload_event_images";b:1;s:13:"delete_events";b:1;s:11:"edit_events";b:1;s:19:"read_private_events";b:1;s:23:"delete_recurring_events";b:1;s:21:"edit_recurring_events";b:1;s:14:"edit_locations";b:1;s:22:"read_private_locations";b:1;s:21:"read_others_locations";b:1;}}s:6:"editor";a:2:{s:4:"name";s:6:"Editor";s:12:"capabilities";a:59:{s:17:"moderate_comments";b:1;s:17:"manage_categories";b:1;s:12:"manage_links";b:1;s:12:"upload_files";b:1;s:15:"unfiltered_html";b:1;s:10:"edit_posts";b:1;s:17:"edit_others_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:10:"edit_pages";b:1;s:4:"read";b:1;s:7:"level_7";b:1;s:7:"level_6";b:1;s:7:"level_5";b:1;s:7:"level_4";b:1;s:7:"level_3";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:17:"edit_others_pages";b:1;s:20:"edit_published_pages";b:1;s:13:"publish_pages";b:1;s:12:"delete_pages";b:1;s:19:"delete_others_pages";b:1;s:22:"delete_published_pages";b:1;s:12:"delete_posts";b:1;s:19:"delete_others_posts";b:1;s:22:"delete_published_posts";b:1;s:20:"delete_private_posts";b:1;s:18:"edit_private_posts";b:1;s:18:"read_private_posts";b:1;s:20:"delete_private_pages";b:1;s:18:"edit_private_pages";b:1;s:18:"read_private_pages";b:1;s:18:"wysija_newsletters";b:1;s:18:"wysija_subscribers";b:1;s:14:"publish_events";b:1;s:20:"delete_others_events";b:1;s:18:"edit_others_events";b:1;s:22:"manage_others_bookings";b:1;s:24:"publish_recurring_events";b:1;s:30:"delete_others_recurring_events";b:1;s:28:"edit_others_recurring_events";b:1;s:17:"publish_locations";b:1;s:23:"delete_others_locations";b:1;s:16:"delete_locations";b:1;s:21:"edit_others_locations";b:1;s:23:"delete_event_categories";b:1;s:21:"edit_event_categories";b:1;s:15:"manage_bookings";b:1;s:19:"upload_event_images";b:1;s:13:"delete_events";b:1;s:11:"edit_events";b:1;s:19:"read_private_events";b:1;s:23:"delete_recurring_events";b:1;s:21:"edit_recurring_events";b:1;s:14:"edit_locations";b:1;s:22:"read_private_locations";b:1;s:21:"read_others_locations";b:1;}}s:6:"author";a:2:{s:4:"name";s:6:"Author";s:12:"capabilities";a:20:{s:12:"upload_files";b:1;s:10:"edit_posts";b:1;s:20:"edit_published_posts";b:1;s:13:"publish_posts";b:1;s:4:"read";b:1;s:7:"level_2";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:12:"delete_posts";b:1;s:22:"delete_published_posts";b:1;s:15:"manage_bookings";b:1;s:19:"upload_event_images";b:1;s:13:"delete_events";b:1;s:11:"edit_events";b:1;s:19:"read_private_events";b:1;s:23:"delete_recurring_events";b:1;s:21:"edit_recurring_events";b:1;s:14:"edit_locations";b:1;s:22:"read_private_locations";b:1;s:21:"read_others_locations";b:1;}}s:11:"contributor";a:2:{s:4:"name";s:11:"Contributor";s:12:"capabilities";a:15:{s:10:"edit_posts";b:1;s:4:"read";b:1;s:7:"level_1";b:1;s:7:"level_0";b:1;s:12:"delete_posts";b:1;s:15:"manage_bookings";b:1;s:19:"upload_event_images";b:1;s:13:"delete_events";b:1;s:11:"edit_events";b:1;s:19:"read_private_events";b:1;s:23:"delete_recurring_events";b:1;s:21:"edit_recurring_events";b:1;s:14:"edit_locations";b:1;s:22:"read_private_locations";b:1;s:21:"read_others_locations";b:1;}}s:10:"subscriber";a:2:{s:4:"name";s:10:"Subscriber";s:12:"capabilities";a:12:{s:4:"read";b:1;s:7:"level_0";b:1;s:15:"manage_bookings";b:1;s:19:"upload_event_images";b:1;s:13:"delete_events";b:1;s:11:"edit_events";b:1;s:19:"read_private_events";b:1;s:23:"delete_recurring_events";b:1;s:21:"edit_recurring_events";b:1;s:14:"edit_locations";b:1;s:22:"read_private_locations";b:1;s:21:"read_others_locations";b:1;}}s:20:"calendar_contributor";a:2:{s:4:"name";s:20:"Calendar Contributor";s:12:"capabilities";a:2:{s:4:"read";i:1;s:14:"aec_add_events";i:1;}}}', 'yes'),
 (93, 'widget_search', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
 (94, 'widget_recent-posts', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
 (95, 'widget_recent-comments', 'a:1:{s:12:"_multiwidget";i:1;}', 'yes'),
@@ -449,7 +685,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (150, 'theme_switched', '', 'yes'),
 (151, 'et_images_temp_folder', 'C:\\wamp\\www\\semine/wp-content/uploads/et_temp', 'yes'),
 (152, 'et_schedule_clean_images_last_time', '1379417287', 'yes'),
-(156, 'recently_activated', 'a:0:{}', 'yes'),
+(156, 'recently_activated', 'a:1:{s:30:"event-registration/EVNTREG.php";i:1379431816;}', 'yes'),
 (157, 'et_fusion', 'a:109:{s:11:"fusion_logo";s:0:"";s:14:"fusion_favicon";s:0:"";s:15:"fusion_bg_image";s:0:"";s:17:"fusion_blog_style";s:5:"false";s:17:"fusion_grab_image";s:5:"false";s:24:"fusion_show_twitter_icon";s:2:"on";s:20:"fusion_show_rss_icon";s:2:"on";s:25:"fusion_show_facebook_icon";s:2:"on";s:18:"fusion_twitter_url";s:26:"http://twitter.com/inovaej";s:14:"fusion_rss_url";s:0:"";s:19:"fusion_facebook_url";s:30:"https://m.facebook.com/inovaej";s:19:"fusion_catnum_posts";i:6;s:23:"fusion_archivenum_posts";i:5;s:22:"fusion_searchnum_posts";i:5;s:19:"fusion_tagnum_posts";i:5;s:18:"fusion_date_format";s:6:"M j, Y";s:18:"fusion_use_excerpt";s:5:"false";s:28:"fusion_responsive_shortcodes";s:2:"on";s:35:"fusion_gf_enable_all_character_sets";s:5:"false";s:17:"fusion_custom_css";s:0:"";s:23:"fusion_display_services";s:2:"on";s:24:"fusion_show_testimonials";s:2:"on";s:23:"fusion_show_recent_news";s:2:"on";s:17:"fusion_show_logos";s:2:"on";s:18:"fusion_home_page_1";i:14;s:18:"fusion_home_page_2";i:16;s:18:"fusion_home_page_3";i:18;s:21:"fusion_more_news_link";s:0:"";s:31:"fusion_home_testimonials_number";i:3;s:21:"fusion_homepage_posts";i:3;s:18:"fusion_logo_path_1";s:78:"http://localhost/semine/wp-content/uploads/2013/08/logo-acens-email-120x42.png";s:17:"fusion_logo_url_1";s:23:"http://www.acens.com.br";s:17:"fusion_logo_alt_1";s:21:"Acens Empresa Júnior";s:18:"fusion_logo_path_2";s:73:"http://localhost/semine/wp-content/uploads/2013/09/Produtora-jr-logo1.png";s:17:"fusion_logo_url_2";s:38:"http://produtorajuniorpjr.wix.com/site";s:17:"fusion_logo_alt_2";s:17:"Produtora Júnior";s:18:"fusion_logo_path_3";s:64:"http://localhost/semine/wp-content/uploads/2013/09/ufc-logo1.png";s:17:"fusion_logo_url_3";s:18:"http://www.ufc.br/";s:17:"fusion_logo_alt_3";s:31:"Universidade Estadual do Ceará";s:18:"fusion_logo_path_4";s:0:"";s:17:"fusion_logo_url_4";s:0:"";s:17:"fusion_logo_alt_4";s:0:"";s:15:"fusion_featured";s:2:"on";s:16:"fusion_duplicate";s:2:"on";s:19:"fusion_featured_num";i:3;s:21:"fusion_feat_posts_cat";i:1;s:16:"fusion_use_pages";s:5:"false";s:18:"fusion_slider_auto";s:5:"false";s:23:"fusion_slider_autospeed";i:7000;s:23:"fusion_enable_dropdowns";s:2:"on";s:16:"fusion_home_link";s:2:"on";s:17:"fusion_sort_pages";s:10:"post_title";s:17:"fusion_order_page";s:3:"asc";s:24:"fusion_tiers_shown_pages";i:3;s:34:"fusion_enable_dropdowns_categories";s:2:"on";s:23:"fusion_categories_empty";s:2:"on";s:29:"fusion_tiers_shown_categories";i:3;s:15:"fusion_sort_cat";s:4:"name";s:16:"fusion_order_cat";s:3:"asc";s:22:"fusion_disable_toptier";s:5:"false";s:16:"fusion_postinfo2";a:1:{i:0;s:4:"date";}s:17:"fusion_thumbnails";s:2:"on";s:24:"fusion_show_postcomments";s:2:"on";s:22:"fusion_page_thumbnails";s:5:"false";s:25:"fusion_show_pagescomments";s:5:"false";s:16:"fusion_postinfo1";a:1:{i:0;s:4:"date";}s:23:"fusion_thumbnails_index";s:2:"on";s:21:"fusion_seo_home_title";s:5:"false";s:27:"fusion_seo_home_description";s:5:"false";s:24:"fusion_seo_home_keywords";s:5:"false";s:25:"fusion_seo_home_canonical";s:5:"false";s:25:"fusion_seo_home_titletext";s:0:"";s:31:"fusion_seo_home_descriptiontext";s:0:"";s:28:"fusion_seo_home_keywordstext";s:0:"";s:20:"fusion_seo_home_type";s:27:"BlogName | Blog description";s:24:"fusion_seo_home_separate";s:3:" | ";s:23:"fusion_seo_single_title";s:5:"false";s:29:"fusion_seo_single_description";s:5:"false";s:26:"fusion_seo_single_keywords";s:5:"false";s:27:"fusion_seo_single_canonical";s:5:"false";s:29:"fusion_seo_single_field_title";s:9:"seo_title";s:35:"fusion_seo_single_field_description";s:15:"seo_description";s:32:"fusion_seo_single_field_keywords";s:12:"seo_keywords";s:22:"fusion_seo_single_type";s:21:"Post title | BlogName";s:26:"fusion_seo_single_separate";s:3:" | ";s:26:"fusion_seo_index_canonical";s:5:"false";s:28:"fusion_seo_index_description";s:5:"false";s:21:"fusion_seo_index_type";s:24:"Category name | BlogName";s:25:"fusion_seo_index_separate";s:3:" | ";s:30:"fusion_integrate_header_enable";s:2:"on";s:28:"fusion_integrate_body_enable";s:2:"on";s:33:"fusion_integrate_singletop_enable";s:2:"on";s:36:"fusion_integrate_singlebottom_enable";s:2:"on";s:23:"fusion_integration_head";s:0:"";s:23:"fusion_integration_body";s:0:"";s:29:"fusion_integration_single_top";s:0:"";s:32:"fusion_integration_single_bottom";s:0:"";s:17:"fusion_468_enable";s:5:"false";s:16:"fusion_468_image";s:0:"";s:14:"fusion_468_url";s:0:"";s:18:"fusion_468_adsense";s:0:"";s:15:"highlight_color";s:7:"#ffffff";s:10:"link_color";s:7:"#db0202";s:10:"font_color";s:7:"#454545";s:14:"headings_color";s:7:"#454545";s:12:"heading_font";s:17:"Yanone Kaffeesatz";s:9:"body_font";s:4:"Lato";s:13:"color_schemes";s:3:"red";s:21:"fusion_exlcats_recent";a:1:{i:0;i:4;}}', 'yes'),
 (161, '_site_transient_et_update_themes', 'O:8:"stdClass":1:{s:12:"last_checked";i:1379417292;}', 'yes'),
 (202, 'nav_menu_options', 'a:2:{i:0;b:0;s:8:"auto_add";a:0:{}}', 'yes'),
@@ -467,8 +703,8 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (217, 'evr_cost_version', '6.00.31', 'yes'),
 (218, 'evr_payment', 'wp_evr_payment', 'yes'),
 (219, 'evr_payment_version', '6.00.31', 'yes'),
-(220, 'plug-evr-activate', '250c608f432434e8d3c3b406a895be3a', 'yes'),
-(221, 'evr_date_installed', '1377171865', 'yes'),
+(220, 'plug-evr-activate', 'ba0ee063d2b98bda139e9257e3049710', 'yes'),
+(221, 'evr_date_installed', '1379431586', 'yes'),
 (222, 'plugin_error', '', 'yes'),
 (231, 'evr_company_settings', 'a:48:{s:7:"company";s:6:"SEMINE";s:15:"company_street1";s:0:"";s:15:"company_street2";s:0:"";s:12:"company_city";s:0:"";s:13:"company_state";s:0:"";s:14:"company_postal";s:0:"";s:13:"company_email";s:0:"";s:11:"evr_page_id";s:1:"8";s:6:"splash";N;s:12:"send_confirm";s:1:"Y";s:7:"message";s:0:"";s:12:"wait_message";s:0:"";s:9:"thumbnail";N;s:12:"calendar_url";s:1:"8";s:16:"default_currency";s:0:"";s:9:"donations";s:0:"";s:6:"checks";s:0:"";s:7:"pay_now";s:7:"PAY NOW";s:14:"payment_vendor";s:0:"";s:17:"payment_vendor_id";s:0:"";s:18:"payment_vendor_key";s:0:"";s:7:"pay_msg";s:90:"To pay online, please select the Payment button to be taken to our payment vendor\\''s site.";s:10:"return_url";s:1:"8";s:10:"notify_url";N;s:13:"cancel_return";s:0:"";s:13:"return_method";s:1:"1";s:11:"use_sandbox";N;s:9:"image_url";s:0:"";s:13:"admin_message";s:0:"";s:11:"pay_confirm";N;s:12:"payment_subj";s:0:"";s:15:"payment_message";s:0:"";s:7:"captcha";s:1:"Y";s:9:"event_pop";N;s:8:"form_css";s:120:"                                                                                                                        ";s:13:"use_sales_tax";s:1:"N";s:14:"sales_tax_rate";s:0:"";s:13:"start_of_week";s:1:"0";s:15:"evr_date_select";N;s:12:"evr_cal_head";s:7:"#583c32";s:16:"cal_head_txt_clr";s:0:"";s:15:"evr_cal_cur_day";s:7:"#b8ced6";s:15:"evr_cal_use_cat";N;s:18:"evr_cal_pop_border";s:7:"#b8ced6";s:15:"cal_day_txt_clr";s:0:"";s:16:"evr_cal_day_head";s:7:"#b8ced6";s:20:"cal_day_head_txt_clr";s:0:"";s:15:"evr_list_format";s:5:"popup";}', 'yes'),
 (232, 'evr_start_of_week', '0', 'yes'),
@@ -477,17 +713,17 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (238, '_site_transient_browser_6682601dad69aa28143aa4cade99527c', 'a:9:{s:8:"platform";s:7:"Windows";s:4:"name";s:6:"Chrome";s:7:"version";s:12:"28.0.1500.95";s:10:"update_url";s:28:"http://www.google.com/chrome";s:7:"img_src";s:49:"http://s.wordpress.org/images/browsers/chrome.png";s:11:"img_src_ssl";s:48:"https://wordpress.org/images/browsers/chrome.png";s:15:"current_version";s:2:"18";s:7:"upgrade";b:0;s:8:"insecure";b:0;}', 'yes'),
 (269, '_site_transient_timeout_poptags_40cd750bba9870f18aada2478b24840a', '1377784202', 'yes'),
 (270, '_site_transient_poptags_40cd750bba9870f18aada2478b24840a', 'a:40:{s:6:"widget";a:3:{s:4:"name";s:6:"widget";s:4:"slug";s:6:"widget";s:5:"count";s:4:"3898";}s:4:"post";a:3:{s:4:"name";s:4:"Post";s:4:"slug";s:4:"post";s:5:"count";s:4:"2456";}s:6:"plugin";a:3:{s:4:"name";s:6:"plugin";s:4:"slug";s:6:"plugin";s:5:"count";s:4:"2344";}s:5:"admin";a:3:{s:4:"name";s:5:"admin";s:4:"slug";s:5:"admin";s:5:"count";s:4:"1930";}s:5:"posts";a:3:{s:4:"name";s:5:"posts";s:4:"slug";s:5:"posts";s:5:"count";s:4:"1856";}s:7:"sidebar";a:3:{s:4:"name";s:7:"sidebar";s:4:"slug";s:7:"sidebar";s:5:"count";s:4:"1583";}s:7:"twitter";a:3:{s:4:"name";s:7:"twitter";s:4:"slug";s:7:"twitter";s:5:"count";s:4:"1329";}s:6:"google";a:3:{s:4:"name";s:6:"google";s:4:"slug";s:6:"google";s:5:"count";s:4:"1325";}s:8:"comments";a:3:{s:4:"name";s:8:"comments";s:4:"slug";s:8:"comments";s:5:"count";s:4:"1310";}s:6:"images";a:3:{s:4:"name";s:6:"images";s:4:"slug";s:6:"images";s:5:"count";s:4:"1260";}s:4:"page";a:3:{s:4:"name";s:4:"page";s:4:"slug";s:4:"page";s:5:"count";s:4:"1225";}s:5:"image";a:3:{s:4:"name";s:5:"image";s:4:"slug";s:5:"image";s:5:"count";s:4:"1121";}s:9:"shortcode";a:3:{s:4:"name";s:9:"shortcode";s:4:"slug";s:9:"shortcode";s:5:"count";s:4:"1000";}s:8:"facebook";a:3:{s:4:"name";s:8:"Facebook";s:4:"slug";s:8:"facebook";s:5:"count";s:3:"982";}s:5:"links";a:3:{s:4:"name";s:5:"links";s:4:"slug";s:5:"links";s:5:"count";s:3:"974";}s:3:"seo";a:3:{s:4:"name";s:3:"seo";s:4:"slug";s:3:"seo";s:5:"count";s:3:"950";}s:9:"wordpress";a:3:{s:4:"name";s:9:"wordpress";s:4:"slug";s:9:"wordpress";s:5:"count";s:3:"844";}s:7:"gallery";a:3:{s:4:"name";s:7:"gallery";s:4:"slug";s:7:"gallery";s:5:"count";s:3:"821";}s:6:"social";a:3:{s:4:"name";s:6:"social";s:4:"slug";s:6:"social";s:5:"count";s:3:"780";}s:3:"rss";a:3:{s:4:"name";s:3:"rss";s:4:"slug";s:3:"rss";s:5:"count";s:3:"722";}s:7:"widgets";a:3:{s:4:"name";s:7:"widgets";s:4:"slug";s:7:"widgets";s:5:"count";s:3:"686";}s:6:"jquery";a:3:{s:4:"name";s:6:"jquery";s:4:"slug";s:6:"jquery";s:5:"count";s:3:"681";}s:5:"pages";a:3:{s:4:"name";s:5:"pages";s:4:"slug";s:5:"pages";s:5:"count";s:3:"678";}s:5:"email";a:3:{s:4:"name";s:5:"email";s:4:"slug";s:5:"email";s:5:"count";s:3:"623";}s:4:"ajax";a:3:{s:4:"name";s:4:"AJAX";s:4:"slug";s:4:"ajax";s:5:"count";s:3:"615";}s:5:"media";a:3:{s:4:"name";s:5:"media";s:4:"slug";s:5:"media";s:5:"count";s:3:"595";}s:10:"javascript";a:3:{s:4:"name";s:10:"javascript";s:4:"slug";s:10:"javascript";s:5:"count";s:3:"572";}s:5:"video";a:3:{s:4:"name";s:5:"video";s:4:"slug";s:5:"video";s:5:"count";s:3:"570";}s:10:"buddypress";a:3:{s:4:"name";s:10:"buddypress";s:4:"slug";s:10:"buddypress";s:5:"count";s:3:"541";}s:4:"feed";a:3:{s:4:"name";s:4:"feed";s:4:"slug";s:4:"feed";s:5:"count";s:3:"539";}s:7:"content";a:3:{s:4:"name";s:7:"content";s:4:"slug";s:7:"content";s:5:"count";s:3:"530";}s:5:"photo";a:3:{s:4:"name";s:5:"photo";s:4:"slug";s:5:"photo";s:5:"count";s:3:"522";}s:4:"link";a:3:{s:4:"name";s:4:"link";s:4:"slug";s:4:"link";s:5:"count";s:3:"506";}s:6:"photos";a:3:{s:4:"name";s:6:"photos";s:4:"slug";s:6:"photos";s:5:"count";s:3:"505";}s:5:"login";a:3:{s:4:"name";s:5:"login";s:4:"slug";s:5:"login";s:5:"count";s:3:"471";}s:4:"spam";a:3:{s:4:"name";s:4:"spam";s:4:"slug";s:4:"spam";s:5:"count";s:3:"458";}s:5:"stats";a:3:{s:4:"name";s:5:"stats";s:4:"slug";s:5:"stats";s:5:"count";s:3:"453";}s:8:"category";a:3:{s:4:"name";s:8:"category";s:4:"slug";s:8:"category";s:5:"count";s:3:"452";}s:7:"youtube";a:3:{s:4:"name";s:7:"youtube";s:4:"slug";s:7:"youtube";s:5:"count";s:3:"436";}s:7:"comment";a:3:{s:4:"name";s:7:"comment";s:4:"slug";s:7:"comment";s:5:"count";s:3:"432";}}', 'yes'),
-(279, '_site_transient_update_plugins', 'O:8:"stdClass":2:{s:12:"last_checked";i:1379417289;s:8:"response";a:0:{}}', 'yes'),
+(279, '_site_transient_update_plugins', 'O:8:"stdClass":3:{s:12:"last_checked";i:1379431783;s:7:"checked";a:7:{s:19:"akismet/akismet.php";s:5:"2.5.9";s:23:"anti-spam/anti-spam.php";s:3:"1.8";s:53:"codestyling-localization/codestyling-localization.php";s:7:"1.99.30";s:30:"event-registration/EVNTREG.php";s:7:"6.00.31";s:33:"events-manager/events-manager.php";s:5:"5.5.1";s:9:"hello.php";s:3:"1.6";s:28:"wysija-newsletters/index.php";s:5:"2.5.8";}s:8:"response";a:0:{}}', 'yes'),
 (280, 'wysija_post_type_updated', '1377773703', 'yes'),
 (281, 'wysija_post_type_created', '1377773703', 'yes'),
 (282, 'installation_step', '16', 'yes'),
 (283, 'wysija', 'YTo4ODp7czo5OiJmcm9tX25hbWUiO3M6NjoiU0VNSU5FIjtzOjEyOiJyZXBseXRvX25hbWUiO3M6NjoiU0VNSU5FIjtzOjEwOiJmcm9tX2VtYWlsIjtzOjI2OiJzZW1pbmVuZXdzbGV0dGVyQGdtYWlsLmNvbSI7czoxMzoicmVwbHl0b19lbWFpbCI7czoyNjoic2VtaW5lbmV3c2xldHRlckBnbWFpbC5jb20iO3M6MTU6ImVtYWlsc19ub3RpZmllZCI7czoyMToiZWx0b24uaW5vdmFAZ21haWwuY29tIjtzOjE1OiJkZWZhdWx0X2xpc3RfaWQiO2k6MTtzOjE3OiJ0b3RhbF9zdWJzY3JpYmVycyI7czoxOiIzIjtzOjE2OiJpbXBvcnR3cF9saXN0X2lkIjtpOjI7czoxODoiY29uZmlybV9lbWFpbF9saW5rIjtpOjI3O3M6MTI6InVwbG9hZGZvbGRlciI7czo0NToiQzpcd2FtcFx3d3dcc2VtaW5lL3dwLWNvbnRlbnQvdXBsb2Fkc1x3eXNpamFcIjtzOjk6InVwbG9hZHVybCI7czo1MDoiaHR0cDovL2xvY2FsaG9zdC9zZW1pbmUvd3AtY29udGVudC91cGxvYWRzL3d5c2lqYS8iO3M6MTY6ImNvbmZpcm1fZW1haWxfaWQiO2k6MjtzOjk6Imluc3RhbGxlZCI7YjoxO3M6MjA6Im1hbmFnZV9zdWJzY3JpcHRpb25zIjtpOjE7czoxNDoiaW5zdGFsbGVkX3RpbWUiO2k6MTM3Nzc3MzcwODtzOjE3OiJ3eXNpamFfZGJfdmVyc2lvbiI7czo1OiIyLjUuNSI7czoxMToiZGtpbV9kb21haW4iO3M6OToibG9jYWxob3N0IjtzOjE2OiJ3eXNpamFfd2hhdHNfbmV3IjtzOjU6IjIuNS41IjtzOjExOiJwb2xsX29yaWdpbiI7czoxMDoicmVwb3NpdG9yeSI7czoxNToicG9sbF9vcmlnaW5fdXJsIjtzOjA6IiI7czoyNDoiZW1haWxzX25vdGlmaWVkX3doZW5fc3ViIjtpOjE7czoyNzoiZW1haWxzX25vdGlmaWVkX3doZW5fYm91bmNlIjtiOjA7czozMzoiZW1haWxzX25vdGlmaWVkX3doZW5fZGFpbHlzdW1tYXJ5IjtpOjE7czoxOToiYm91bmNlX3Byb2Nlc3NfYXV0byI7YjowO3M6MjI6Im1zX2JvdW5jZV9wcm9jZXNzX2F1dG8iO2I6MDtzOjk6InNoYXJlZGF0YSI7YjowO3M6ODoiaW5kdXN0cnkiO2k6MTtzOjExOiJka2ltX2FjdGl2ZSI7YjowO3M6MTE6ImNvbW1lbnRmb3JtIjtpOjE7czo5OiJzbXRwX3Jlc3QiO2I6MDtzOjE0OiJkZWJ1Z19sb2dfY3JvbiI7YjowO3M6MjA6ImRlYnVnX2xvZ19wb3N0X25vdGlmIjtiOjA7czoyMjoiZGVidWdfbG9nX3F1ZXJ5X2Vycm9ycyI7YjowO3M6MjM6ImRlYnVnX2xvZ19xdWV1ZV9wcm9jZXNzIjtiOjA7czoxNjoiZGVidWdfbG9nX21hbnVhbCI7YjowO3M6MTU6ImNvbXBhbnlfYWRkcmVzcyI7czo1MToiZWx0b24uaW5vdmFAZ21haWwuY29tDQpkYXlhbm5haGVnbHkuaW5vdmFAZ21haWwuY29tIjtzOjE3OiJjb21tZW50Zm9ybV9saXN0cyI7YToxOntpOjA7czoxOiIzIjt9czo5OiJzbXRwX2hvc3QiO3M6MTQ6InNtdHAuZ21haWwuY29tIjtzOjEwOiJzbXRwX2xvZ2luIjtzOjI2OiJzZW1pbmVuZXdzbGV0dGVyQGdtYWlsLmNvbSI7czoxMzoic210cF9wYXNzd29yZCI7czoxMToiMW4wdjRzZW1pbmUiO3M6OToic210cF9wb3J0IjtzOjM6IjQ2NSI7czoxMToic210cF9zZWN1cmUiO3M6Mzoic3NsIjtzOjEyOiJib3VuY2VfZW1haWwiO3M6MDoiIjtzOjExOiJodG1sX3NvdXJjZSI7czoxOiIxIjtzOjI2OiJzdWJzY3JpYmVyc19jb3VudF9saW5rbmFtZSI7czoyNjoiW3d5c2lqYV9zdWJzY3JpYmVyc19jb3VudF0iO3M6MjE6InNlbmRpbmdfZW1haWxzX251bWJlciI7czoyOiIyMCI7czoxNjoic3Vic2NyaWJlZF90aXRsZSI7czoyNzoiVm9jw6ogc2UgaW5zY3JldmV1IGVtOiAlMSRzIjtzOjE5OiJzdWJzY3JpYmVkX3N1YnRpdGxlIjtzOjQ1OiJWb2PDqiBmb2kgYWRpY2lvbmFkbyBhIG5vc3NhIGxpc3RhLiBPYnJpZ2FkbyEiO3M6MTg6ImNvbW1lbnRmb3JtX2xpc3RzWyI7czoxOiIzIjtzOjE0OiJzZW5kaW5nX21ldGhvZCI7czo1OiJnbWFpbCI7czoyNzoibWFuYWdlX3N1YnNjcmlwdGlvbnNfbGlzdHNbIjtzOjE6IjMiO3M6ODoiX3dwbm9uY2UiO3M6MTA6IjQ2ZTQyZWMyNGYiO3M6MTY6Il93cF9odHRwX3JlZmVyZXIiO3M6NDU6Ii9zZW1pbmUvd3AtYWRtaW4vYWRtaW4ucGhwP3BhZ2U9d3lzaWphX2NvbmZpZyI7czo2OiJhY3Rpb24iO3M6NDoic2F2ZSI7czoxMToicmVkaXJlY3R0YWIiO3M6MDoiIjtzOjE3OiJzZW5kaW5nX2VtYWlsc19vayI7YjoxO3M6Mjk6Im1hbmFnZV9zdWJzY3JpcHRpb25zX2xpbmtuYW1lIjtzOjIyOiJFZGl0YXIgc3VhIGluc2NyacOnw6NvIjtzOjIwOiJjb21tZW50Zm9ybV9saW5rbmFtZSI7czozNjoiU2ltLCBtZSBhZGljaW9uZSBhIHN1YSBtYWlsaW5nIGxpc3QuIjtzOjIyOiJ2aWV3aW5icm93c2VyX2xpbmtuYW1lIjtzOjYyOiJQcm9ibGVtYXM/IFtsaW5rXVZlamEgZXNzYSBuZXdzbGV0dGVyIGVtIHNldSBuYXZlZ2Fkb3IuWy9saW5rXSI7czoyMDoidW5zdWJzY3JpYmVfbGlua25hbWUiO3M6MTA6IlN1YnNjcmV2ZXIiO3M6MTg6InVuc3Vic2NyaWJlZF90aXRsZSI7czozMToiVm9jw6ogZm9pIHJlbW92aWRvIGRlc3NhIGxpc3RhISI7czoyMToidW5zdWJzY3JpYmVkX3N1YnRpdGxlIjtzOjMxOiJWb2PDqiBmb2kgcmVtb3ZpZG8gZGVzc2EgbGlzdGEhIjtzOjMxOiJyb2xlc2NhcC0tLWVkaXRvci0tLW5ld3NsZXR0ZXJzIjtpOjE7czozMToicm9sZXNjYXAtLS1lZGl0b3ItLS1zdWJzY3JpYmVycyI7aToxO3M6MjY6Im1hbmFnZV9zdWJzY3JpcHRpb25zX2xpc3RzIjthOjE6e2k6MDtzOjE6IjMiO31zOjM4OiJyb2xlc2NhcC0tLWFkbWluaXN0cmF0b3ItLS1uZXdzbGV0dGVycyI7YjowO3M6MzE6InJvbGVzY2FwLS0tYXV0aG9yLS0tbmV3c2xldHRlcnMiO2I6MDtzOjM2OiJyb2xlc2NhcC0tLWNvbnRyaWJ1dG9yLS0tbmV3c2xldHRlcnMiO2I6MDtzOjM1OiJyb2xlc2NhcC0tLXN1YnNjcmliZXItLS1uZXdzbGV0dGVycyI7YjowO3M6Mzg6InJvbGVzY2FwLS0tYWRtaW5pc3RyYXRvci0tLXN1YnNjcmliZXJzIjtiOjA7czozMToicm9sZXNjYXAtLS1hdXRob3ItLS1zdWJzY3JpYmVycyI7YjowO3M6MzY6InJvbGVzY2FwLS0tY29udHJpYnV0b3ItLS1zdWJzY3JpYmVycyI7YjowO3M6MzU6InJvbGVzY2FwLS0tc3Vic2NyaWJlci0tLXN1YnNjcmliZXJzIjtiOjA7czozMzoicm9sZXNjYXAtLS1hZG1pbmlzdHJhdG9yLS0tY29uZmlnIjtiOjA7czoyNjoicm9sZXNjYXAtLS1lZGl0b3ItLS1jb25maWciO2I6MDtzOjI2OiJyb2xlc2NhcC0tLWF1dGhvci0tLWNvbmZpZyI7YjowO3M6MzE6InJvbGVzY2FwLS0tY29udHJpYnV0b3ItLS1jb25maWciO2I6MDtzOjMwOiJyb2xlc2NhcC0tLXN1YnNjcmliZXItLS1jb25maWciO2I6MDtzOjM2OiJyb2xlc2NhcC0tLWFkbWluaXN0cmF0b3ItLS10aGVtZV90YWIiO2I6MDtzOjI5OiJyb2xlc2NhcC0tLWVkaXRvci0tLXRoZW1lX3RhYiI7YjowO3M6Mjk6InJvbGVzY2FwLS0tYXV0aG9yLS0tdGhlbWVfdGFiIjtiOjA7czozNDoicm9sZXNjYXAtLS1jb250cmlidXRvci0tLXRoZW1lX3RhYiI7YjowO3M6MzM6InJvbGVzY2FwLS0tc3Vic2NyaWJlci0tLXRoZW1lX3RhYiI7YjowO3M6MzY6InJvbGVzY2FwLS0tYWRtaW5pc3RyYXRvci0tLXN0eWxlX3RhYiI7YjowO3M6Mjk6InJvbGVzY2FwLS0tZWRpdG9yLS0tc3R5bGVfdGFiIjtiOjA7czoyOToicm9sZXNjYXAtLS1hdXRob3ItLS1zdHlsZV90YWIiO2I6MDtzOjM0OiJyb2xlc2NhcC0tLWNvbnRyaWJ1dG9yLS0tc3R5bGVfdGFiIjtiOjA7czozMzoicm9sZXNjYXAtLS1zdWJzY3JpYmVyLS0tc3R5bGVfdGFiIjtiOjA7fQ==', 'yes'),
 (284, 'wysija_reinstall', '0', 'no'),
-(285, 'wysija_schedules', 'a:5:{s:5:"queue";a:3:{s:13:"next_schedule";i:1379429333;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:6:"bounce";a:3:{s:13:"next_schedule";d:100001377773724;s:13:"prev_schedule";i:0;s:7:"running";b:0;}s:5:"daily";a:3:{s:13:"next_schedule";i:1379503687;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:6:"weekly";a:3:{s:13:"next_schedule";i:1380022084;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:7:"monthly";a:3:{s:13:"next_schedule";i:1380192925;s:13:"prev_schedule";i:0;s:7:"running";b:0;}}', 'yes'),
+(285, 'wysija_schedules', 'a:5:{s:5:"queue";a:3:{s:13:"next_schedule";i:1379433080;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:6:"bounce";a:3:{s:13:"next_schedule";d:100001377773724;s:13:"prev_schedule";i:0;s:7:"running";b:0;}s:5:"daily";a:3:{s:13:"next_schedule";i:1379503687;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:6:"weekly";a:3:{s:13:"next_schedule";i:1380022084;s:13:"prev_schedule";b:0;s:7:"running";b:0;}s:7:"monthly";a:3:{s:13:"next_schedule";i:1380192925;s:13:"prev_schedule";i:0;s:7:"running";b:0;}}', 'yes'),
 (286, 'wysija_msg', '', 'no'),
 (287, 'wysija_queries', '', 'no'),
 (288, 'wysija_queries_errors', '', 'no'),
-(289, 'wysija_check_pn', '1379425732.7128', 'yes'),
+(289, 'wysija_check_pn', '1379429480.4326', 'yes'),
 (290, 'widget_wysija', 'a:2:{i:5;a:2:{s:5:"title";s:23:"Assine nossa Newsletter";s:4:"form";s:1:"1";}s:12:"_multiwidget";i:1;}', 'yes'),
 (294, 'category_children', 'a:0:{}', 'yes'),
 (296, 'widget_evr-widget-list-events', 'a:2:{i:2;a:4:{s:14:"event_template";s:0:"";s:11:"event_limit";s:1:"1";s:17:"event_category_id";s:1:"0";s:5:"title";s:11:"Inscreva-se";}s:12:"_multiwidget";i:1;}', 'yes'),
@@ -498,7 +734,7 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (306, '_site_transient_browser_79a87d8cbec77c6629aa27b69ecda1db', 'a:9:{s:8:"platform";s:7:"Windows";s:4:"name";s:6:"Chrome";s:7:"version";s:12:"29.0.1547.62";s:10:"update_url";s:28:"http://www.google.com/chrome";s:7:"img_src";s:49:"http://s.wordpress.org/images/browsers/chrome.png";s:11:"img_src_ssl";s:48:"https://wordpress.org/images/browsers/chrome.png";s:15:"current_version";s:2:"18";s:7:"upgrade";b:0;s:8:"insecure";b:0;}', 'yes'),
 (344, '_site_transient_timeout_browser_667f99213e8b026d4df4b411203cc4e0', '1378920279', 'yes'),
 (345, '_site_transient_browser_667f99213e8b026d4df4b411203cc4e0', 'a:9:{s:8:"platform";s:7:"Windows";s:4:"name";s:6:"Chrome";s:7:"version";s:12:"29.0.1547.62";s:10:"update_url";s:28:"http://www.google.com/chrome";s:7:"img_src";s:49:"http://s.wordpress.org/images/browsers/chrome.png";s:11:"img_src_ssl";s:48:"https://wordpress.org/images/browsers/chrome.png";s:15:"current_version";s:2:"18";s:7:"upgrade";b:0;s:8:"insecure";b:0;}', 'yes'),
-(454, 'wysija_last_scheduled_check', '1379425733', 'yes'),
+(454, 'wysija_last_scheduled_check', '1379429480', 'yes'),
 (458, '_site_transient_timeout_browser_9c5c950bb151bb8555cd4caf028bf72a', '1379449432', 'yes'),
 (459, '_site_transient_browser_9c5c950bb151bb8555cd4caf028bf72a', 'a:9:{s:8:"platform";s:7:"Windows";s:4:"name";s:6:"Chrome";s:7:"version";s:12:"29.0.1547.66";s:10:"update_url";s:28:"http://www.google.com/chrome";s:7:"img_src";s:49:"http://s.wordpress.org/images/browsers/chrome.png";s:11:"img_src_ssl";s:48:"https://wordpress.org/images/browsers/chrome.png";s:15:"current_version";s:2:"18";s:7:"upgrade";b:0;s:8:"insecure";b:0;}', 'yes'),
 (487, '_site_transient_timeout_theme_roots', '1379419090', 'yes'),
@@ -536,8 +772,8 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 (514, '_transient_dash_aa95765b5cc111c56d5993d476b1c2f0', '<div class="rss-widget"><ul><li><a class=''rsswidget'' href=''http://feedproxy.google.com/~r/WordpressTavern/~3/Fuo2M16F1g4/is-anyone-interested-in-a-bbpress-camp'' title=''This past weekend we spoke with John James Jacoby on our WordPress Weekly podcast. John is the lead developer for both the bbPress and BuddyPress plugins. We had the pleasure of chatting with him about his new job at 10up as well as everything that’s going on with bbPress and BuddyPress these days. During our interview we asked John if he knew of any bbPress or BuddyCamp events in the works. He said that he didn’t know of any coming up but would love to see a bbPress camp organized, perhaps in a more central midwest location. The question is: Is there enough interest to warrant a bbPress event or perhaps combine it with a BuddyPress event?  If extensions are any indication, both of these plugins have large, active communities surrounding them. bbPress currently has 132 plugins that extend the basic forum software and BuddyPress lists 483 extensions. It’s safe to say that they go far beyond your average wordpress.org plugin. They each have their own dedicated websites housing support forums and documentation. Both projects have attracted a number of elite developers and talented contributors.  bbPress and BuddyPress are on the rise: Downloads have steadily increased for both plugins. I checked archive.org to get the download counts for the past few months. From May to September this year bbPress downloads went from 669,199 to 802,236. In the span of just five short months, the total number of bbPress downloads has increased nearly 20%.  bbPress extensions have nearly doubled in the past year. In September of 2012 there were only 78 bbPress plugins listed but those numbers have shot up to 132 over the past year.  Similarly, BuddyPress downloads are also on the rise. In the past five months, total downloads have climbed from 1.5 to 1.7 million, demonstrating an 11% increase.  With all the updates that are coming to the BuddyPress codex, we can only expect those numbers to increase, both for extensions and downloads.  Is it time for a bbPress camp? I attended the first BuddyPress camp that was held in Vancouver. What a fantastic event! One easy way to add an experimental camp like this is to tack it on to an existing WordCamp as an extra day. This setup was quite successful with WordCamp Vancouver / BuddyCamp in 2012. Participants who traveled to the area were able to attend both events and meet up with BuddyPress fans and developers from around the world. I wanted to put this question to our readers: With the success of past BuddyPress camps, do you think it’s time for a bbPress camp? Or perhaps a multi-plugin camp with more plugin communities included?  If you’d be interested to attend, which one would be the most beneficial to you? Please take a moment to vote in our poll: Note: There is a poll embedded within this post, please visit the site to participate in this post&#039;s poll. So what do you think? Does the WordPress community need a bbPress camp? Do we need more BuddyPress camps? If there was a multi-plugin camp, which plugin communities would you like to see included? ''>WPTavern: Is Anyone Interested In a bbPress Camp?</a></li><li><a class=''rsswidget'' href=''http://wordpress.tv/2013/09/15/panel-discussion-commercial-themes-plugins-qa/'' title=''     ''>WordPress.tv: Panel Discussion: Commercial Themes &amp; Plugins Q&amp;A</a></li><li><a class=''rsswidget'' href=''http://feedproxy.google.com/~r/WordpressTavern/~3/tEXfczzBl9M/wpweekly-episode-121-all-about-the-bbs-with-john-james-jacoby'' title=''There were no spooky ghosts or constant howling noises in this episode but we did manage to go in-depth with John James Jacoby to discuss bbPress and BuddyPress. During the show, we find out why he left Automattic for 10UP, what is was like to jump into the project lead position for bbPress after so many people had accepted the project as being abandoned, and finally, where he sees BuddyPress 2 years from now. We could have talked to JJJ all night about forums and social activity but unfortunately, we only had 68 minutes with him. That’s ok because he’ll definitely be on the show again to cover some ground we didn’t get to in this episode.   Stories Discussed: WordPress 3.6.1 Available Ryan McCue On Creating The JSON REST API For WordPress Open Source Alternatives to Pressgram WordPress 3.7 to Remove Post By Email Feature in Favor of Official Plugin  WPWeekly Meta: Next Episode: Friday, September 27th 9P.M. Eastern Subscribe To WPWeekly Via Itunes: Click here to subscribe Subscribe To WPWeekly Via RSS: Click here to subscribe Subscribe To WPWeekly Via Stitcher Radio: Click here to subscribe Listen To Episode #121:  ''>WPTavern: WPWeekly Episode 121 – All About The bb’s With John James Jacoby</a></li><li><a class=''rsswidget'' href=''http://wordpress.tv/2013/09/14/matt-mullenweg-wordpress-town-hall/'' title=''     ''>WordPress.tv: Matt Mullenweg: WordPress Town Hall</a></li><li><a class=''rsswidget'' href=''http://wordpress.tv/2013/09/14/stephanie-leary-content-strategy-for-wordpress/'' title=''     ''>WordPress.tv: Stephanie Leary: Content Strategy for WordPress</a></li></ul></div>', 'no'),
 (515, '_transient_timeout_feed_mod_77fa140e07ce53fe8c87136636f83d72', '1379468952', 'no'),
 (516, '_transient_feed_mod_77fa140e07ce53fe8c87136636f83d72', '1379425752', 'no'),
-(517, '_transient_timeout_plugin_slugs', '1379512153', 'no'),
-(518, '_transient_plugin_slugs', 'a:6:{i:0;s:19:"akismet/akismet.php";i:1;s:23:"anti-spam/anti-spam.php";i:2;s:53:"codestyling-localization/codestyling-localization.php";i:3;s:30:"event-registration/EVNTREG.php";i:4;s:9:"hello.php";i:5;s:28:"wysija-newsletters/index.php";}', 'no'),
+(517, '_transient_timeout_plugin_slugs', '1379518217', 'no'),
+(518, '_transient_plugin_slugs', 'a:7:{i:0;s:19:"akismet/akismet.php";i:1;s:23:"anti-spam/anti-spam.php";i:2;s:53:"codestyling-localization/codestyling-localization.php";i:3;s:30:"event-registration/EVNTREG.php";i:4;s:33:"events-manager/events-manager.php";i:5;s:9:"hello.php";i:6;s:28:"wysija-newsletters/index.php";}', 'no'),
 (519, '_transient_timeout_dash_de3249c4736ad3bd2cd29147c4a0d43e', '1379468953', 'no'),
 (520, '_transient_dash_de3249c4736ad3bd2cd29147c4a0d43e', '<h4>Mais populares</h4>\n<h5><a href=''http://wordpress.org/plugins/contact-form-plugin/''>Contact Form</a></h5>&nbsp;<span>(<a href=''plugin-install.php?tab=plugin-information&amp;plugin=contact-form-plugin&amp;_wpnonce=3511d3a77d&amp;TB_iframe=true&amp;width=600&amp;height=800'' class=''thickbox'' title=''Contact Form''>Instalar</a>)</span>\n<p>Add Contact Form to your WordPress website.</p>\n<h4>Plugins mais recentes</h4>\n<h5><a href=''http://wordpress.org/plugins/saboard/''>SABoard</a></h5>&nbsp;<span>(<a href=''plugin-install.php?tab=plugin-information&amp;plugin=saboard&amp;_wpnonce=5502c5648c&amp;TB_iframe=true&amp;width=600&amp;height=800'' class=''thickbox'' title=''SABoard''>Instalar</a>)</span>\n<p>SABoard is amazing community plugin writing, write comments, answers ... provide.</p>\n', 'no'),
 (521, '_transient_timeout_feed_f54b1bdca594d0682431ade875d2ee23', '1379468981', 'no');
@@ -549,7 +785,335 @@ INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`
 INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES
 (526, '_transient_feed_6352ab72fdcf9e55d54bb8ac05453221', 'a:4:{s:5:"child";a:1:{s:0:"";a:1:{s:3:"rss";a:1:{i:0;a:6:{s:4:"data";s:3:"\n	\n";s:7:"attribs";a:2:{s:0:"";a:1:{s:7:"version";s:4:"0.92";}s:36:"http://www.w3.org/XML/1998/namespace";a:1:{s:4:"lang";s:5:"en-US";}}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:1:{s:7:"channel";a:1:{i:0;a:6:{s:4:"data";s:41:"\n		\n		\n		\n		\n		\n		\n		\n		\n		\n		\n		\n		\n		\n	";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:4:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:32:"Event Registration for Wordpress";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:42:"http://wpeventregister.com/forum/index.php";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:54:"Live information from Event Registration for Wordpress";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"item";a:10:{i:0;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:66:"The Karen Millen dresses started being available on stores nearby ";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=795.msg2315#msg2315";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:291:"Ladies aspiring to be the next top model definitely make it a point to flash a Karen Millen collection in some form or other be it a <a href="http://www.wealdress.com/" class="bbc_link" target="_blank">cheap bridesmaid dresses</a> or shoes or any other accessory. The Karen Millen dresses...";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:23:"Version 6.00.31 Patches";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=795.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Tue, 17 Sep 2013 08:52:11 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=795.msg2315#msg2315";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:1;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:51:"Re: Registration Emails / confirmations not working";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=683.msg2314#msg2314";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:263:"I&#39;m having this same issue as well. I&#39;ve checked Yes on both spots, but no email is sent when a registration is confirmed. I just discovered the email problem. Any help would be appreciated because this is supposed to be live now. Here is the site:[url...";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:19:"Bug/Issue Reporting";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=683.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Mon, 16 Sep 2013 22:32:16 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=683.msg2314#msg2314";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:2;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:16:"Astrid dxot MtgU";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=794.msg2313#msg2313";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:255:"While shopping for a completely new lcd Television programs, you must take into accout more than just the money and also excellent quality. Little bit while ., you might not like to hurt you wallet or maybe get a new low cost type, yet , essential loca...";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:18:"General Discussion";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=794.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Mon, 16 Sep 2013 19:47:31 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=794.msg2313#msg2313";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:3;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:60:"Upgrading to 6.0013 and now the payment method dose not work";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=793.msg2312#msg2312";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:79:"Hey i think i just upgraded and now it will not let pay pay online what do i do";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:18:"General Discussion";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=793.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 20:00:25 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=793.msg2312#msg2312";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:4;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:34:"Re: email notification not working";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=780.msg2311#msg2311";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:42:"Try disabling and reactivating the plugin.";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:23:"Version 6.00.31 Patches";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=780.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 04:13:37 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=780.msg2311#msg2311";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:5;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:25:"Re: Waiting List Position";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=786.msg2310#msg2310";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:71:"You will need to export the attendee list and manually send the emails.";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:18:"General Discussion";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=786.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 04:11:40 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=786.msg2310#msg2310";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:6;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:66:"Re: Error updating multiple plugins while Event Register is active";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=783.msg2309#msg2309";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:52:"Unfortunately we have no experience with this issue.";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:19:"Bug/Issue Reporting";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=783.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 04:09:32 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=783.msg2309#msg2309";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:7;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:42:"Re: Paypal payment not updated in plug-in.";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=784.msg2308#msg2308";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:57:"Do you have IPN enabled on your paypal account at PayPal?";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:19:"Bug/Issue Reporting";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=784.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 04:08:37 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=784.msg2308#msg2308";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:8;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:40:"Re: Event link not opening on IE browser";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=789.msg2307#msg2307";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:151:"The isse may be related to your themes style for ie.&nbsp; The plugin admin menu has option to disable the popup and just offer direct link for events.";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:19:"Bug/Issue Reporting";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=789.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Sat, 14 Sep 2013 04:07:26 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=789.msg2307#msg2307";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}i:9;a:6:{s:4:"data";s:31:"\n			\n			\n			\n			\n			\n			\n			\n		";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";s:5:"child";a:1:{s:0:"";a:7:{s:5:"title";a:1:{i:0;a:5:{s:4:"data";s:26:"Re: How to modify the form";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"link";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=718.msg2306#msg2306";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:11:"description";a:1:{i:0;a:5:{s:4:"data";s:208:"\nphone number to the form e.g. <br /><br /><br /><br /><br />________________________________________________<br /><a href="http://www.Fifacs.com/" class="bbc_link" target="_blank">FIFA 13 Coins</a><br />\n			";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"category";a:1:{i:0;a:5:{s:4:"data";s:18:"General Discussion";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:8:"comments";a:1:{i:0;a:5:{s:4:"data";s:66:"http://wpeventregister.com/forum/index.php?action=post;topic=718.0";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:7:"pubDate";a:1:{i:0;a:5:{s:4:"data";s:29:"Fri, 13 Sep 2013 08:35:30 GMT";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}s:4:"guid";a:1:{i:0;a:5:{s:4:"data";s:68:"http://wpeventregister.com/forum/index.php?topic=718.msg2306#msg2306";s:7:"attribs";a:0:{}s:8:"xml_base";s:0:"";s:17:"xml_base_explicit";b:0;s:8:"xml_lang";s:5:"en-US";}}}}}}}}}}}}}}}}s:4:"type";i:8;s:7:"headers";a:13:{s:4:"date";s:29:"Tue, 17 Sep 2013 13:49:41 GMT";s:6:"server";s:6:"Apache";s:7:"expires";s:29:"Thu, 19 Nov 1981 08:52:00 GMT";s:6:"pragma";s:8:"no-cache";s:13:"cache-control";s:7:"private";s:4:"vary";s:15:"Accept-Encoding";s:16:"content-encoding";s:4:"gzip";s:10:"set-cookie";s:79:"PHPSESSID=727a9d827c9eaa6a61dd9a1ba8dd8ee8; path=/; domain=.wpeventregister.com";s:12:"content-type";s:39:"application/rss+xml; charset=ISO-8859-1";s:7:"x-cache";s:26:"MISS from granja.funece.br";s:14:"x-cache-lookup";s:31:"MISS from granja.funece.br:4050";s:3:"via";s:45:"1.1 granja.funece.br:4050 (squid/2.7.STABLE9)";s:10:"connection";s:5:"close";}s:5:"build";s:14:"20130913144404";}', 'no'),
 (527, '_transient_timeout_feed_mod_6352ab72fdcf9e55d54bb8ac05453221', '1379468983', 'no'),
-(528, '_transient_feed_mod_6352ab72fdcf9e55d54bb8ac05453221', '1379425783', 'no');
+(528, '_transient_feed_mod_6352ab72fdcf9e55d54bb8ac05453221', '1379425783', 'no'),
+(529, 'aec_options', 'a:24:{s:12:"filter_label";s:9:"Show Type";s:5:"limit";s:1:"0";s:13:"show_weekends";s:1:"1";s:13:"show_map_link";s:1:"1";s:4:"menu";s:1:"1";s:10:"make_links";s:1:"0";s:11:"popup_links";s:1:"1";s:13:"step_interval";s:2:"30";s:11:"addy_format";s:1:"0";s:6:"scroll";s:1:"1";s:5:"title";s:1:"2";s:5:"venue";s:1:"1";s:7:"address";s:1:"2";s:4:"city";s:1:"2";s:5:"state";s:1:"2";s:3:"zip";s:1:"2";s:7:"country";s:1:"1";s:4:"link";s:1:"1";s:11:"description";s:1:"2";s:7:"contact";s:1:"2";s:12:"contact_info";s:1:"2";s:10:"accessible";s:1:"0";s:4:"rsvp";s:1:"0";s:5:"reset";s:1:"0";}', 'yes'),
+(530, 'aec_version', '1.0.4', 'yes'),
+(532, 'dbem_events_page', '45', 'yes'),
+(533, 'dbem_locations_page', '46', 'yes'),
+(534, 'dbem_categories_page', '47', 'yes'),
+(535, 'dbem_tags_page', '48', 'yes'),
+(536, 'dbem_my_bookings_page', '49', 'yes'),
+(537, 'dbem_hello_to_user', '1', 'yes'),
+(538, 'dbem_time_format', 'H:i', 'yes'),
+(539, 'dbem_date_format', 'd/m/Y', 'yes'),
+(540, 'dbem_date_format_js', 'dd/mm/yy', 'yes'),
+(541, 'dbem_dates_separator', ' - ', 'yes'),
+(542, 'dbem_times_separator', ' - ', 'yes'),
+(543, 'dbem_default_category', '-1', 'yes'),
+(544, 'dbem_default_location', '0', 'yes'),
+(545, 'dbem_events_default_orderby', 'event_start_date,event_start_time,event_name', 'yes'),
+(546, 'dbem_events_default_order', 'ASC', 'yes'),
+(547, 'dbem_events_default_limit', '10', 'yes'),
+(548, 'dbem_serach_form_submit', 'Buscar', 'yes'),
+(549, 'dbem_search_form_advanced', '1', 'yes'),
+(550, 'dbem_search_form_advanced_hidden', '1', 'yes'),
+(551, 'dbem_search_form_advanced_show', 'Show Advanced Search', 'yes'),
+(552, 'dbem_search_form_advanced_hide', 'Hide Advanced Search', 'yes'),
+(553, 'dbem_search_form_text', '1', 'yes'),
+(554, 'dbem_search_form_text_label', 'Buscar', 'yes'),
+(555, 'dbem_search_form_geo', '1', 'yes'),
+(556, 'dbem_search_form_geo_label', 'Near...', 'yes'),
+(557, 'dbem_search_form_dates', '1', 'yes'),
+(558, 'dbem_search_form_dates_label', 'Dates', 'yes'),
+(559, 'dbem_search_form_dates_separator', 'e', 'yes'),
+(560, 'dbem_search_form_categories', '1', 'yes'),
+(561, 'dbem_search_form_categories_label', 'Todas as Categorias', 'yes'),
+(562, 'dbem_search_form_category_label', 'Categoria', 'yes'),
+(563, 'dbem_search_form_countries', '1', 'yes'),
+(564, 'dbem_search_form_countries_label', 'Todos os Países', 'yes'),
+(565, 'dbem_search_form_country_label', 'País', 'yes'),
+(566, 'dbem_search_form_regions', '1', 'yes'),
+(567, 'dbem_search_form_regions_label', 'Todas as Regiões', 'yes'),
+(568, 'dbem_search_form_region_label', 'Region', 'yes'),
+(569, 'dbem_search_form_states', '1', 'yes'),
+(570, 'dbem_search_form_states_label', 'Todos os Estados', 'yes'),
+(571, 'dbem_search_form_state_label', 'State/County', 'yes'),
+(572, 'dbem_search_form_towns', '0', 'yes'),
+(573, 'dbem_search_form_towns_label', 'All Cities/Towns', 'yes'),
+(574, 'dbem_search_form_town_label', 'City/Town', 'yes'),
+(575, 'dbem_events_form_editor', '1', 'yes'),
+(576, 'dbem_events_form_reshow', '1', 'yes'),
+(577, 'dbem_events_form_result_success', 'You have successfully submitted your event, which will be published pending approval.', 'yes'),
+(578, 'dbem_events_form_result_success_updated', 'You have successfully updated your event, which will be republished pending approval.', 'yes'),
+(579, 'dbem_events_anonymous_submissions', '0', 'yes'),
+(580, 'dbem_events_anonymous_user', '1', 'yes'),
+(581, 'dbem_events_anonymous_result_success', 'You have successfully submitted your event, which will be published pending approval.', 'yes'),
+(582, 'dbem_event_submitted_email_admin', '', 'yes'),
+(583, 'dbem_event_submitted_email_subject', 'Submitted Event Awaiting Approval', 'yes'),
+(584, 'dbem_event_submitted_email_body', 'A new event has been submitted by #_CONTACTNAME.\r\n\r\nName : #_EVENTNAME \r\n\r\nDate : #_EVENTDATES \r\n\r\nTime : #_EVENTTIMES \r\n\r\nPlease visit http://localhost/semine/wp-admin/post.php?action=edit&post=#_EVENTPOSTID to review this event for approval.\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(585, 'dbem_event_resubmitted_email_subject', 'Re-Submitted Event Awaiting Approval', 'yes'),
+(586, 'dbem_event_resubmitted_email_body', 'A previously published event has been modified by #_CONTACTNAME, and this event is now unpublished and pending your approval.\r\n\r\nName : #_EVENTNAME \r\n\r\nDate : #_EVENTDATES \r\n\r\nTime : #_EVENTTIMES \r\n\r\nPlease visit http://localhost/semine/wp-admin/post.php?action=edit&post=#_EVENTPOSTID to review this event for approval.\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(587, 'dbem_event_published_email_subject', 'Published Event - #_EVENTNAME', 'yes'),
+(588, 'dbem_event_published_email_body', 'A new event has been published by #_CONTACTNAME.\r\n\r\nName : #_EVENTNAME \r\n\r\nDate : #_EVENTDATES \r\n\r\nTime : #_EVENTTIMES \r\n\r\nEdit this event - http://localhost/semine/wp-admin/post.php?action=edit&post=#_EVENTPOSTID \r\n\r\n View this event - #_EVENTURL\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(589, 'dbem_event_approved_email_subject', 'Event Approved - #_EVENTNAME', 'yes'),
+(590, 'dbem_event_approved_email_body', 'Dear #_CONTACTNAME, \r\n\r\nYour event #_EVENTNAME on #_EVENTDATES has been approved.\r\n\r\nYou can view your event here: #_EVENTURL\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(591, 'dbem_event_reapproved_email_subject', 'Event Approved - #_EVENTNAME', 'yes'),
+(592, 'dbem_event_reapproved_email_body', 'Dear #_CONTACTNAME, \r\n\r\nYour event #_EVENTNAME on #_EVENTDATES has been approved.\r\n\r\nYou can view your event here: #_EVENTURL\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(593, 'dbem_events_page_title', 'Eventos', 'yes'),
+(594, 'dbem_events_page_scope', 'future', 'yes'),
+(595, 'dbem_events_page_search_form', '0', 'yes'),
+(596, 'dbem_event_list_item_format_header', '<table cellpadding="0" cellspacing="0" class="events-table" >\r\n    <thead>\r\n        <tr>\r\n			<th class="event-time" width="150">Data / Hora</th>\r\n			<th class="event-description" width="*">Evento</th>\r\n		</tr>\r\n   	</thead>\r\n    <tbody>', 'yes'),
+(597, 'dbem_event_list_item_format', '<tr>\r\n			<td>\r\n                #_EVENTDATES<br/>\r\n                #_EVENTTIMES\r\n            </td>\r\n            <td>\r\n                #_EVENTLINK\r\n                {has_location}<br/><i>#_LOCATIONNAME, #_LOCATIONTOWN #_LOCATIONSTATE</i>{/has_location}\r\n            </td>\r\n        </tr>', 'yes'),
+(598, 'dbem_event_list_item_format_footer', '</tbody></table>', 'yes'),
+(599, 'dbem_display_calendar_in_events_page', '0', 'yes'),
+(600, 'dbem_single_event_format', '<div style="float:right; margin:0px 0px 15px 15px;">#_LOCATIONMAP</div>\r\n<p>\r\n	<strong>Data / Hora</strong><br/>\r\n	Date(s) - #_EVENTDATES<br /><i>#_EVENTTIMES</i>\r\n</p>\r\n{has_location}\r\n<p>\r\n	<strong>Localização</strong><br/>\r\n	#_LOCATIONLINK\r\n</p>\r\n{/has_location}\r\n<p>\r\n	<strong>Categorias</strong>\r\n	#_CATEGORIES\r\n</p>\r\n<br style="clear:both" />\r\n#_EVENTNOTES\r\n{has_bookings}\r\n<h3>Bookings</h3>\r\n#_BOOKINGFORM\r\n{/has_bookings}', 'yes'),
+(601, 'dbem_event_page_title_format', '#_EVENTNAME', 'yes'),
+(602, 'dbem_event_all_day_message', 'All Day', 'yes'),
+(603, 'dbem_no_events_message', 'Não Eventos', 'yes'),
+(604, 'dbem_locations_default_orderby', 'location_name', 'yes'),
+(605, 'dbem_locations_default_order', 'ASC', 'yes'),
+(606, 'dbem_locations_default_limit', '10', 'yes'),
+(607, 'dbem_locations_page_title', 'Evento Locais', 'yes'),
+(608, 'dbem_locations_page_search_form', '1', 'yes'),
+(609, 'dbem_no_locations_message', 'Não Locais', 'yes'),
+(610, 'dbem_location_default_country', 'US', 'yes'),
+(611, 'dbem_location_list_item_format_header', '<ul class="em-locations-list">', 'yes'),
+(612, 'dbem_location_list_item_format', '<li>#_LOCATIONLINK<ul><li>#_LOCATIONFULLLINE</li></ul></li>', 'yes'),
+(613, 'dbem_location_list_item_format_footer', '</ul>', 'yes'),
+(614, 'dbem_location_page_title_format', '#_LOCATIONNAME', 'yes'),
+(615, 'dbem_single_location_format', '<div style="float:right; margin:0px 0px 15px 15px;">#_LOCATIONMAP</div>\r\n<p>\r\n	<strong>Endereço</strong><br/>\r\n	#_LOCATIONADDRESS<br/>\r\n	#_LOCATIONTOWN<br/>\r\n	#_LOCATIONSTATE<br/>\r\n	#_LOCATIONREGION<br/>\r\n	#_LOCATIONPOSTCODE<br/>\r\n	#_LOCATIONCOUNTRY\r\n</p>\r\n<br style="clear:both" />\r\n#_LOCATIONNOTES\r\n\r\n<h3>Upcoming Events</h3>\r\n<p>#_LOCATIONNEXTEVENTS</p>', 'yes'),
+(616, 'dbem_location_no_events_message', '<li>No events in this location</li>', 'yes'),
+(617, 'dbem_location_event_list_item_header_format', '<ul>', 'yes'),
+(618, 'dbem_location_event_list_item_format', '<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES</li>', 'yes'),
+(619, 'dbem_location_event_list_item_footer_format', '</ul>', 'yes'),
+(620, 'dbem_location_event_list_limit', '20', 'yes'),
+(621, 'dbem_location_event_single_format', '#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES', 'yes'),
+(622, 'dbem_location_no_event_message', 'No events in this location', 'yes'),
+(623, 'dbem_categories_default_limit', '10', 'yes'),
+(624, 'dbem_categories_default_orderby', 'name', 'yes'),
+(625, 'dbem_categories_default_order', 'ASC', 'yes'),
+(626, 'dbem_categories_list_item_format_header', '<ul class="em-categories-list">', 'yes'),
+(627, 'dbem_categories_list_item_format', '<li>#_CATEGORYLINK</li>', 'yes'),
+(628, 'dbem_categories_list_item_format_footer', '</ul>', 'yes'),
+(629, 'dbem_no_categories_message', 'Não Categorias', 'yes'),
+(630, 'dbem_category_page_title_format', '#_CATEGORYNAME', 'yes'),
+(631, 'dbem_category_page_format', '#_CATEGORYNOTES<h3>Upcoming Events</h3>#_CATEGORYNEXTEVENTS', 'yes'),
+(632, 'dbem_category_no_events_message', '<li>No events in this category</li>', 'yes'),
+(633, 'dbem_category_event_list_item_header_format', '<ul>', 'yes'),
+(634, 'dbem_category_event_list_item_format', '<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES</li>', 'yes'),
+(635, 'dbem_category_event_list_item_footer_format', '</ul>', 'yes'),
+(636, 'dbem_category_event_list_limit', '20', 'yes'),
+(637, 'dbem_category_event_single_format', '#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES', 'yes'),
+(638, 'dbem_category_no_event_message', 'No events in this category', 'yes'),
+(639, 'dbem_tags_default_limit', '10', 'yes'),
+(640, 'dbem_tags_default_orderby', 'name', 'yes'),
+(641, 'dbem_tags_default_order', 'ASC', 'yes'),
+(642, 'dbem_tags_list_item_format_header', '<ul class="em-tags-list">', 'yes'),
+(643, 'dbem_tags_list_item_format', '<li>#_TAGLINK</li>', 'yes'),
+(644, 'dbem_tags_list_item_format_footer', '</ul>', 'yes'),
+(645, 'dbem_no_tags_message', 'Não Tags', 'yes'),
+(646, 'dbem_tag_page_title_format', '#_TAGNAME', 'yes'),
+(647, 'dbem_tag_page_format', '<h3>Upcoming Events</h3>#_TAGNEXTEVENTS', 'yes'),
+(648, 'dbem_tag_no_events_message', '<li>No events with this tag</li>', 'yes'),
+(649, 'dbem_tag_event_list_item_header_format', '<ul>', 'yes'),
+(650, 'dbem_tag_event_list_item_format', '<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES</li>', 'yes'),
+(651, 'dbem_tag_event_list_item_footer_format', '</ul>', 'yes'),
+(652, 'dbem_tag_event_single_format', '#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES', 'yes'),
+(653, 'dbem_tag_no_event_message', 'No events with this tag', 'yes'),
+(654, 'dbem_tag_event_list_limit', '20', 'yes'),
+(655, 'dbem_rss_limit', '0', 'yes'),
+(656, 'dbem_rss_scope', 'future', 'yes'),
+(657, 'dbem_rss_main_title', 'SEMINE - Semana  de  Inteligência  em  Negócios - Eventos', 'yes'),
+(658, 'dbem_rss_main_description', 'Só mais um site WordPress - Eventos', 'yes'),
+(659, 'dbem_rss_description_format', '#_EVENTDATES - #_EVENTTIMES <br/>#_LOCATIONNAME <br/>#_LOCATIONADDRESS <br/>#_LOCATIONTOWN', 'yes'),
+(660, 'dbem_rss_title_format', '#_EVENTNAME', 'yes'),
+(661, 'em_rss_pubdate', 'Tue, 17 Sep 2013 15:30:00 +0000', 'yes'),
+(662, 'dbem_ical_limit', '0', 'yes'),
+(663, 'dbem_ical_scope', 'future', 'yes'),
+(664, 'dbem_ical_description_format', '#_EVENTNAME - #_LOCATIONNAME - #_EVENTDATES - #_EVENTTIMES', 'yes'),
+(665, 'dbem_ical_real_description_format', '#_EVENTEXCERPT', 'yes'),
+(666, 'dbem_ical_location_format', '#_LOCATION', 'yes'),
+(667, 'dbem_gmap_is_active', '1', 'yes'),
+(668, 'dbem_map_default_width', '400px', 'yes'),
+(669, 'dbem_map_default_height', '300px', 'yes'),
+(670, 'dbem_location_baloon_format', '<strong>#_LOCATIONNAME</strong><br/>#_LOCATIONADDRESS - #_LOCATIONTOWN<br/><a href="#_LOCATIONPAGEURL">Eventos</a>', 'yes'),
+(671, 'dbem_map_text_format', '<strong>#_LOCATIONNAME</strong><p>#_LOCATIONADDRESS</p><p>#_LOCATIONTOWN</p>', 'yes'),
+(672, 'dbem_email_disable_registration', '0', 'yes'),
+(673, 'dbem_rsvp_mail_port', '465', 'yes'),
+(674, 'dbem_smtp_host', 'localhost', 'yes'),
+(675, 'dbem_mail_sender_name', '', 'yes'),
+(676, 'dbem_rsvp_mail_send_method', 'mail', 'yes'),
+(677, 'dbem_rsvp_mail_SMTPAuth', '1', 'yes'),
+(678, 'dbem_smtp_html', '1', 'yes'),
+(679, 'dbem_smtp_html_br', '1', 'yes'),
+(680, 'dbem_image_max_width', '700', 'yes'),
+(681, 'dbem_image_max_height', '700', 'yes'),
+(682, 'dbem_image_min_width', '50', 'yes'),
+(683, 'dbem_image_min_height', '50', 'yes'),
+(684, 'dbem_image_max_size', '204800', 'yes'),
+(685, 'dbem_list_date_title', 'Eventos - #j #M #y', 'yes'),
+(686, 'dbem_full_calendar_month_format', 'M Y', 'yes'),
+(687, 'dbem_full_calendar_event_format', '<li>#_EVENTLINK</li>', 'yes'),
+(688, 'dbem_full_calendar_long_events', '0', 'yes'),
+(689, 'dbem_full_calendar_initials_length', '0', 'yes'),
+(690, 'dbem_full_calendar_abbreviated_weekdays', '1', 'yes'),
+(691, 'dbem_display_calendar_day_single_yes', '1', 'yes'),
+(692, 'dbem_small_calendar_month_format', 'M Y', 'yes'),
+(693, 'dbem_small_calendar_event_title_format', '#_EVENTNAME', 'yes'),
+(694, 'dbem_small_calendar_event_title_separator', ', ', 'yes'),
+(695, 'dbem_small_calendar_initials_length', '1', 'yes'),
+(696, 'dbem_small_calendar_abbreviated_weekdays', '0', 'yes'),
+(697, 'dbem_display_calendar_order', 'ASC', 'yes'),
+(698, 'dbem_display_calendar_orderby', 'event_name,event_start_time', 'yes'),
+(699, 'dbem_display_calendar_events_limit', '3', 'yes'),
+(700, 'dbem_display_calendar_events_limit_msg', 'more...', 'yes'),
+(701, 'dbem_calendar_direct_links', '1', 'yes'),
+(702, 'dbem_require_location', '0', 'yes'),
+(703, 'dbem_locations_enabled', '1', 'yes'),
+(704, 'dbem_use_select_for_locations', '0', 'yes'),
+(705, 'dbem_attributes_enabled', '1', 'yes'),
+(706, 'dbem_recurrence_enabled', '1', 'yes'),
+(707, 'dbem_rsvp_enabled', '1', 'yes'),
+(708, 'dbem_categories_enabled', '1', 'yes'),
+(709, 'dbem_tags_enabled', '1', 'yes'),
+(710, 'dbem_placeholders_custom', '', 'yes'),
+(711, 'dbem_location_attributes_enabled', '1', 'yes'),
+(712, 'dbem_location_placeholders_custom', '', 'yes'),
+(713, 'dbem_bookings_registration_disable', '0', 'yes'),
+(714, 'dbem_bookings_registration_disable_user_emails', '0', 'yes'),
+(715, 'dbem_bookings_registration_user', '', 'yes'),
+(716, 'dbem_bookings_approval', '1', 'yes'),
+(717, 'dbem_bookings_approval_reserved', '0', 'yes'),
+(718, 'dbem_bookings_approval_overbooking', '0', 'yes'),
+(719, 'dbem_bookings_double', '0', 'yes'),
+(720, 'dbem_bookings_user_cancellation', '1', 'yes'),
+(721, 'dbem_bookings_currency', 'USD', 'yes'),
+(722, 'dbem_bookings_currency_decimal_point', ',', 'yes'),
+(723, 'dbem_bookings_currency_thousands_sep', '.', 'yes'),
+(724, 'dbem_bookings_currency_format', '@#', 'yes'),
+(725, 'dbem_bookings_tax', '0', 'yes'),
+(726, 'dbem_bookings_tax_auto_add', '0', 'yes'),
+(727, 'dbem_bookings_submit_button', 'Enviar a sua reserva', 'yes'),
+(728, 'dbem_bookings_login_form', '1', 'yes'),
+(729, 'dbem_bookings_anonymous', '1', 'yes'),
+(730, 'dbem_bookings_form_max', '20', 'yes'),
+(731, 'dbem_bookings_form_msg_disabled', 'Reservas on-line não estão disponíveis para este evento.', 'yes'),
+(732, 'dbem_bookings_form_msg_closed', 'As reservas estão fechados para este evento.', 'yes'),
+(733, 'dbem_bookings_form_msg_full', 'This event is fully booked.', 'yes'),
+(734, 'dbem_bookings_form_msg_attending', 'You are currently attending this event.', 'yes'),
+(735, 'dbem_bookings_form_msg_bookings_link', 'Manage my bookings', 'yes'),
+(736, 'dbem_booking_warning_cancel', 'Tem certeza de que deseja cancelar a sua reserva?', 'yes'),
+(737, 'dbem_booking_feedback_cancelled', 'Reserva Cancelado', 'yes'),
+(738, 'dbem_booking_feedback_pending', 'Confirmação de reserva bem sucedida, aguardando confirmação(você também receberá um e-mail uma vez confirmado).', 'yes'),
+(739, 'dbem_booking_feedback', 'Reserva  feita com sucesso.', 'yes'),
+(740, 'dbem_booking_feedback_full', 'A sua reserva não pode ser efetuada, não há lugares disponíveis!', 'yes'),
+(741, 'dbem_booking_feedback_log_in', 'Você deve fazer login ou registre-se para fazer uma reserva.', 'yes'),
+(742, 'dbem_booking_feedback_nomail', 'No entanto, tivemos problemas ao enviar um e-mail de confirmação para você e / ou a pessoa de contacto evento. Você também pode entrar em contato diretamente, informando sobre o erro.', 'yes'),
+(743, 'dbem_booking_feedback_error', 'Reserva não  pôde  ser criada:', 'yes'),
+(744, 'dbem_booking_feedback_email_exists', 'Este e-mail já existe em nosso sistema, faça o login para registar-se e prosseguir com a sua reserva.', 'yes'),
+(745, 'dbem_booking_feedback_new_user', 'Uma nova conta de usuário foi criado para você. Por favor verifique seu e-mail para detalhes de acesso.', 'yes'),
+(746, 'dbem_booking_feedback_reg_error', 'Houve um problema ao criar uma conta de usuário, por favor entre em com o administrador do site.', 'yes'),
+(747, 'dbem_booking_feedback_already_booked', 'Você já tem reservado um lugar neste evento.', 'yes'),
+(748, 'dbem_booking_feedback_min_space', 'Você deve solicitar pelo menos um espaço para reservar um evento.', 'yes'),
+(749, 'dbem_booking_feedback_spaces_limit', 'You cannot book more than %d spaces for this event.', 'yes'),
+(750, 'dbem_booking_button_msg_book', 'Reserve agora', 'yes'),
+(751, 'dbem_booking_button_msg_booking', 'Reserva ...', 'yes'),
+(752, 'dbem_booking_button_msg_booked', 'Reserva Submitted', 'yes'),
+(753, 'dbem_booking_button_msg_already_booked', 'Already Booked', 'yes'),
+(754, 'dbem_booking_button_msg_error', 'Reserva Error. Try again?', 'yes'),
+(755, 'dbem_booking_button_msg_full', 'Sold Out', 'yes'),
+(756, 'dbem_booking_button_msg_cancel', 'Cancelar', 'yes'),
+(757, 'dbem_booking_button_msg_canceling', 'Canceling...', 'yes'),
+(758, 'dbem_booking_button_msg_cancelled', 'Cancelado', 'yes'),
+(759, 'dbem_booking_button_msg_cancel_error', 'Cancellation Error. Try again?', 'yes'),
+(760, 'dbem_bookings_notify_admin', '0', 'yes'),
+(761, 'dbem_bookings_contact_email', '1', 'yes'),
+(762, 'dbem_bookings_contact_email_subject', 'New Booking', 'yes'),
+(763, 'dbem_bookings_contact_email_body', '#_BOOKINGNAME (#_BOOKINGEMAIL) will attend #_EVENTNAME on #_EVENTDATES. He wants to reserve #_BOOKINGSPACES spaces.\r\n\r\n Now there are #_BOOKEDSPACES spaces reserved, #_AVAILABLESPACES are still available.\r\n\r\nYours faithfully,\r\n\r\nEvents Manager - http://wp-events-plugin.com\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(764, 'dbem_contactperson_email_cancelled_subject', 'Reserva cancelada', 'yes'),
+(765, 'dbem_contactperson_email_cancelled_body', '#_BOOKINGNAME (#_BOOKINGEMAIL) cancelled his booking at #_EVENTNAME on #_EVENTDATES. He wanted to reserve #_BOOKINGSPACES spaces.\r\n\r\n Now there are #_BOOKEDSPACES spaces reserved, #_AVAILABLESPACES are still available.\r\n\r\nYours faithfully,\r\n\r\nEvents Manager - http://wp-events-plugin.com\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(766, 'dbem_bookings_email_pending_subject', 'Reserva Pendente', 'yes'),
+(767, 'dbem_bookings_email_pending_body', 'Dear #_BOOKINGNAME, \r\n\r\nYou have requested #_BOOKINGSPACES space/spaces for #_EVENTNAME.\r\n\r\nWhen : #_EVENTDATES @ #_EVENTTIMES\r\n\r\nWhere : #_LOCATIONNAME - #_LOCATIONFULLLINE\r\n\r\nYour booking is currently pending approval by our administrators. Once approved you will receive an automatic confirmation.\r\n\r\nYours faithfully,\r\n\r\n#_CONTACTNAME\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(768, 'dbem_bookings_email_rejected_subject', 'Reserva Rejeitada', 'yes'),
+(769, 'dbem_bookings_email_rejected_body', 'Dear #_BOOKINGNAME, \r\n\r\nYour requested booking for #_BOOKINGSPACES spaces at #_EVENTNAME on #_EVENTDATES has been rejected.\r\n\r\nYours faithfully,\r\n\r\n#_CONTACTNAME\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(770, 'dbem_bookings_email_confirmed_subject', 'Reserva Confirmada', 'yes'),
+(771, 'dbem_bookings_email_confirmed_body', 'Dear #_BOOKINGNAME, \r\n\r\nYou have successfully reserved #_BOOKINGSPACES space/spaces for #_EVENTNAME.\r\n\r\nWhen : #_EVENTDATES @ #_EVENTTIMES\r\n\r\nWhere : #_LOCATIONNAME - #_LOCATIONFULLLINE\r\n\r\nYours faithfully,\r\n\r\n#_CONTACTNAME\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(772, 'dbem_bookings_email_cancelled_subject', 'Reserva cancelada', 'yes'),
+(773, 'dbem_bookings_email_cancelled_body', 'Dear #_BOOKINGNAME, \r\n\r\nYour requested booking for #_BOOKINGSPACES spaces at #_EVENTNAME on #_EVENTDATES has been cancelled.\r\n\r\nYours faithfully,\r\n\r\n#_CONTACTNAME\r\n\r\n\r\n-------------------------------\r\n\r\nPowered by Events Manager - http://wp-events-plugin.com', 'yes'),
+(774, 'dbem_bookings_email_registration_subject', '[SEMINE - Semana  de  Inteligência  em  Negócios] O seu nome de usuário e senha', 'yes'),
+(775, 'dbem_bookings_email_registration_body', 'You have successfully created an account at SEMINE - Semana  de  Inteligência  em  Negócios\r\n\r\nYou can log into our site here : http://localhost/semine/wp-login.php\r\n\r\nNome de Usuário : %username%\r\n\r\nSenha : %password%\r\n\r\nTo view your bookings, please visit http://localhost/semine/?page_id=49 after logging in.', 'yes'),
+(776, 'dbem_bookings_tickets_orderby', 'ticket_price DESC, ticket_name ASC', 'yes'),
+(777, 'dbem_bookings_tickets_priority', '0', 'yes'),
+(778, 'dbem_bookings_tickets_show_unavailable', '0', 'yes'),
+(779, 'dbem_bookings_tickets_show_loggedout', '1', 'yes'),
+(780, 'dbem_bookings_tickets_single', '1', 'yes'),
+(781, 'dbem_bookings_tickets_single_form', '0', 'yes'),
+(782, 'dbem_bookings_my_title_format', 'Minhas Reservas', 'yes'),
+(783, 'dbem_bp_events_list_format_header', '<ul class="em-events-list">', 'yes'),
+(784, 'dbem_bp_events_list_format', '<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES<ul><li>#_LOCATIONLINK - #_LOCATIONADDRESS, #_LOCATIONTOWN</li></ul></li>', 'yes'),
+(785, 'dbem_bp_events_list_format_footer', '</ul>', 'yes'),
+(786, 'dbem_bp_events_list_none_format', '<p class="em-events-list">Nenhum Eventos</p>', 'yes'),
+(787, 'dbem_css_editors', '1', 'yes'),
+(788, 'dbem_css_rsvp', '1', 'yes'),
+(789, 'dbem_css_rsvpadmin', '1', 'yes'),
+(790, 'dbem_css_evlist', '1', 'yes'),
+(791, 'dbem_css_search', '1', 'yes'),
+(792, 'dbem_css_loclist', '1', 'yes'),
+(793, 'dbem_css_catlist', '1', 'yes'),
+(794, 'dbem_css_taglist', '1', 'yes'),
+(795, 'dbem_cp_events_slug', 'events', 'yes'),
+(796, 'dbem_cp_locations_slug', 'locations', 'yes'),
+(797, 'dbem_taxonomy_category_slug', 'events/categories', 'yes'),
+(798, 'dbem_taxonomy_tag_slug', 'events/tags', 'yes'),
+(799, 'dbem_cp_events_template', '', 'yes'),
+(800, 'dbem_cp_events_body_class', '', 'yes'),
+(801, 'dbem_cp_events_post_class', '', 'yes'),
+(802, 'dbem_cp_events_formats', '1', 'yes'),
+(803, 'dbem_cp_events_has_archive', '1', 'yes'),
+(804, 'dbem_events_default_archive_orderby', '_start_ts', 'yes'),
+(805, 'dbem_events_default_archive_order', 'ASC', 'yes'),
+(806, 'dbem_events_archive_scope', 'past', 'yes'),
+(807, 'dbem_cp_events_archive_formats', '1', 'yes'),
+(808, 'dbem_cp_events_search_results', '0', 'yes'),
+(809, 'dbem_cp_events_custom_fields', '0', 'yes'),
+(810, 'dbem_cp_events_comments', '1', 'yes'),
+(811, 'dbem_cp_locations_template', '', 'yes'),
+(812, 'dbem_cp_locations_body_class', '', 'yes'),
+(813, 'dbem_cp_locations_post_class', '', 'yes'),
+(814, 'dbem_cp_locations_formats', '1', 'yes'),
+(815, 'dbem_cp_locations_has_archive', '1', 'yes'),
+(816, 'dbem_locations_default_archive_orderby', 'title', 'yes'),
+(817, 'dbem_locations_default_archive_order', 'ASC', 'yes'),
+(818, 'dbem_cp_locations_archive_formats', '1', 'yes'),
+(819, 'dbem_cp_locations_search_results', '0', 'yes'),
+(820, 'dbem_cp_locations_custom_fields', '1', 'yes'),
+(821, 'dbem_cp_locations_comments', '1', 'yes'),
+(822, 'dbem_cp_categories_formats', '1', 'yes'),
+(823, 'dbem_categories_default_archive_orderby', '_start_ts', 'yes'),
+(824, 'dbem_categories_default_archive_order', 'ASC', 'yes'),
+(825, 'dbem_cp_tags_formats', '1', 'yes'),
+(826, 'dbem_tags_default_archive_orderby', '_start_ts', 'yes'),
+(827, 'dbem_tags_default_archive_order', 'ASC', 'yes'),
+(828, 'dbem_credits', '0', 'yes'),
+(829, 'dbem_time_24h', '1', 'yes'),
+(830, 'dbem_version', '5.51', 'yes'),
+(831, 'dbem_thumbnails_enabled', '0', 'yes'),
+(832, 'dbem_js_limit', '0', 'yes'),
+(833, 'dbem_js_limit_general', '0', 'yes'),
+(834, 'dbem_js_limit_search', '', 'yes'),
+(835, 'dbem_js_limit_events_form', '', 'yes'),
+(836, 'dbem_js_limit_edit_bookings', '', 'yes'),
+(837, 'dbem_css_limit', '0', 'yes'),
+(838, 'dbem_css_limit_include', '0', 'yes'),
+(839, 'dbem_css_limit_exclude', '0', 'yes'),
+(840, 'dbem_disable_timthumb', '0', 'yes'),
+(841, 'dbem_pro_dev_updates', '0', 'yes'),
+(842, 'dbem_disable_title_rewrites', '0', 'yes'),
+(843, 'dbem_title_html', '', 'yes'),
+(844, 'dbem_events_current_are_past', '0', 'yes'),
+(845, 'dbem_bookings_default_orderby', 'event_name', 'yes'),
+(846, 'dbem_bookings_default_order', 'ASC', 'yes'),
+(847, 'dbem_edit_events_page', '', 'yes'),
+(848, 'dbem_edit_locations_page', '', 'yes'),
+(849, 'dbem_edit_bookings_page', '', 'yes'),
+(850, 'dbem_event_list_groupby', '0', 'yes'),
+(851, 'dbem_event_list_groupby_format', '', 'yes'),
+(852, 'dbem_display_calendar_day_single', '0', 'yes'),
+(853, 'dbem_bookings_tickets_show_member_tickets', '0', 'yes'),
+(854, 'dbem_mail_sender_address', '', 'yes'),
+(855, 'dbem_smtp_username', 'inova', 'yes'),
+(856, 'dbem_smtp_password', 'inovasemine', 'yes'),
+(859, 'em_last_modified', '1379432297', 'yes');
 
 -- --------------------------------------------------------
 
@@ -565,7 +1129,7 @@ CREATE TABLE IF NOT EXISTS `wp_postmeta` (
   PRIMARY KEY (`meta_id`),
   KEY `post_id` (`post_id`),
   KEY `meta_key` (`meta_key`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=126 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
 
 --
 -- Extraindo dados da tabela `wp_postmeta`
@@ -605,7 +1169,7 @@ INSERT INTO `wp_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUE
 (39, 16, '_et_slide_more_text', ''),
 (40, 16, '_et_slide_more_link', ''),
 (41, 18, '_edit_last', '1'),
-(42, 18, '_edit_lock', '1379426393:1'),
+(42, 18, '_edit_lock', '1379432646:1'),
 (43, 18, '_wp_page_template', 'page-full.php'),
 (44, 18, '_et_slide_bg', ''),
 (45, 18, '_et_slide_subtitle', ''),
@@ -681,7 +1245,37 @@ INSERT INTO `wp_postmeta` (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUE
 (122, 35, '_wp_attachment_image_alt', 'Produtora Júnior'),
 (123, 36, '_wp_attached_file', '2013/09/ufc-logo.png'),
 (124, 36, '_wp_attachment_metadata', 'a:5:{s:5:"width";i:60;s:6:"height";i:80;s:4:"file";s:20:"2013/09/ufc-logo.png";s:5:"sizes";a:2:{s:15:"et-author-thumb";a:4:{s:4:"file";s:18:"ufc-logo-50x50.png";s:5:"width";i:50;s:6:"height";i:50;s:9:"mime-type";s:9:"image/png";}s:18:"et-blogimage-thumb";a:4:{s:4:"file";s:18:"ufc-logo-49x49.png";s:5:"width";i:49;s:6:"height";i:49;s:9:"mime-type";s:9:"image/png";}}s:10:"image_meta";a:10:{s:8:"aperture";i:0;s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";i:0;s:9:"copyright";s:0:"";s:12:"focal_length";i:0;s:3:"iso";i:0;s:13:"shutter_speed";i:0;s:5:"title";s:0:"";}}'),
-(125, 36, '_wp_attachment_image_alt', 'Universidade Federal do Ceará');
+(125, 36, '_wp_attachment_image_alt', 'Universidade Federal do Ceará'),
+(126, 50, '_edit_last', '1'),
+(127, 50, '_edit_lock', '1379432250:1'),
+(128, 50, '_event_id', '1'),
+(129, 50, '_event_start_time', '00:00:00'),
+(130, 50, '_event_end_time', '00:00:00'),
+(131, 50, '_event_all_day', '1'),
+(132, 50, '_event_start_date', '2013-10-01'),
+(133, 50, '_event_end_date', '2013-10-08'),
+(134, 50, '_event_rsvp', '1'),
+(135, 50, '_event_rsvp_date', ''),
+(136, 50, '_event_rsvp_time', '00:00:00'),
+(137, 50, '_event_rsvp_spaces', '0'),
+(138, 50, '_event_spaces', '900'),
+(139, 50, '_location_id', '0'),
+(140, 50, '_recurrence_id', ''),
+(141, 50, '_event_status', '1'),
+(142, 50, '_event_private', '0'),
+(143, 50, '_event_date_created', ''),
+(144, 50, '_event_date_modified', ''),
+(145, 50, '_blog_id', ''),
+(146, 50, '_group_id', '0'),
+(147, 50, '_recurrence', '0'),
+(148, 50, '_recurrence_interval', ''),
+(149, 50, '_recurrence_freq', ''),
+(150, 50, '_recurrence_days', '0'),
+(151, 50, '_recurrence_byday', ''),
+(152, 50, '_recurrence_byweekno', ''),
+(153, 50, '_start_ts', '1380585600'),
+(154, 50, '_end_ts', '1381190400'),
+(155, 45, '_edit_lock', '1379432684:1');
 
 -- --------------------------------------------------------
 
@@ -718,7 +1312,7 @@ CREATE TABLE IF NOT EXISTS `wp_posts` (
   KEY `type_status_date` (`post_type`,`post_status`,`post_date`,`ID`),
   KEY `post_parent` (`post_parent`),
   KEY `post_author` (`post_author`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
 
 --
 -- Extraindo dados da tabela `wp_posts`
@@ -740,7 +1334,7 @@ INSERT INTO `wp_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post
 (15, 1, '2013-08-29 10:36:01', '2013-08-29 10:36:01', '', 'Sobre a SEMINE', '', 'inherit', 'open', 'open', '', '14-revision-v1', '', '', '2013-08-29 10:36:01', '2013-08-29 10:36:01', '', 14, 'http://localhost/semine/?p=15', 0, 'revision', '', 0),
 (16, 1, '2013-08-29 10:36:24', '2013-08-29 10:36:24', '', 'Programação', '', 'publish', 'open', 'open', '', 'programacao', '', '', '2013-08-29 11:52:37', '2013-08-29 11:52:37', '', 0, 'http://localhost/semine/?page_id=16', 0, 'page', '', 0),
 (17, 1, '2013-08-29 10:36:24', '2013-08-29 10:36:24', '', 'Programação', '', 'inherit', 'open', 'open', '', '16-revision-v1', '', '', '2013-08-29 10:36:24', '2013-08-29 10:36:24', '', 16, 'http://localhost/semine/?p=17', 0, 'revision', '', 0),
-(18, 1, '2013-08-29 10:36:47', '2013-08-29 10:36:47', '{EVRREGIS}', 'Inscrição', '', 'publish', 'open', 'open', '', 'inscricao-2', '', '', '2013-09-17 14:00:52', '2013-09-17 14:00:52', '', 0, 'http://localhost/semine/?page_id=18', 0, 'page', '', 0),
+(18, 1, '2013-08-29 10:36:47', '2013-08-29 10:36:47', '', 'Inscrição', '', 'publish', 'open', 'open', '', 'inscricao-2', '', '', '2013-09-17 15:45:48', '2013-09-17 15:45:48', '', 0, 'http://localhost/semine/?page_id=18', 0, 'page', '', 0),
 (19, 1, '2013-08-29 10:36:47', '2013-08-29 10:36:47', '', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-08-29 10:36:47', '2013-08-29 10:36:47', '', 18, 'http://localhost/semine/?p=19', 0, 'revision', '', 0),
 (20, 1, '2013-08-29 10:37:04', '2013-08-29 10:37:04', '', 'Contato', '', 'publish', 'open', 'open', '', 'contato', '', '', '2013-09-06 13:56:07', '2013-09-06 13:56:07', '', 0, 'http://localhost/semine/?page_id=20', 0, 'page', '', 0),
 (21, 1, '2013-08-29 10:37:04', '2013-08-29 10:37:04', '', 'Contato', '', 'inherit', 'open', 'open', '', '20-revision-v1', '', '', '2013-08-29 10:37:04', '2013-08-29 10:37:04', '', 20, 'http://localhost/semine/?p=21', 0, 'revision', '', 0),
@@ -759,9 +1353,19 @@ INSERT INTO `wp_posts` (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post
 (36, 1, '2013-09-17 13:56:35', '2013-09-17 13:56:35', '\r\n{EVRREGIS}', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 13:56:35', '2013-09-17 13:56:35', '', 18, 'http://localhost/semine/?p=36', 0, 'revision', '', 0),
 (37, 1, '2013-09-17 13:58:43', '2013-09-17 13:58:43', '[EVR_SINGLE event_id="??"]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 13:58:43', '2013-09-17 13:58:43', '', 18, 'http://localhost/semine/?p=37', 0, 'revision', '', 0),
 (38, 1, '2013-09-17 13:59:15', '2013-09-17 13:59:15', '[EVR_SINGLE event_id="01"]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 13:59:15', '2013-09-17 13:59:15', '', 18, 'http://localhost/semine/?p=38', 0, 'revision', '', 0),
-(39, 1, '2013-09-17 14:00:18', '2013-09-17 14:00:18', '[EVRREGIS', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-autosave-v1', '', '', '2013-09-17 14:00:18', '2013-09-17 14:00:18', '', 18, 'http://localhost/semine/?p=39', 0, 'revision', '', 0),
+(39, 1, '2013-09-17 15:23:28', '2013-09-17 15:23:28', '[calendar]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-autosave-v1', '', '', '2013-09-17 15:23:28', '2013-09-17 15:23:28', '', 18, 'http://localhost/semine/?p=39', 0, 'revision', '', 0),
 (40, 1, '2013-09-17 14:00:28', '2013-09-17 14:00:28', '[EVRREGIS]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 14:00:28', '2013-09-17 14:00:28', '', 18, 'http://localhost/semine/?p=40', 0, 'revision', '', 0),
-(41, 1, '2013-09-17 14:00:52', '2013-09-17 14:00:52', '{EVRREGIS}', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 14:00:52', '2013-09-17 14:00:52', '', 18, 'http://localhost/semine/?p=41', 0, 'revision', '', 0);
+(41, 1, '2013-09-17 14:00:52', '2013-09-17 14:00:52', '{EVRREGIS}', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 14:00:52', '2013-09-17 14:00:52', '', 18, 'http://localhost/semine/?p=41', 0, 'revision', '', 0),
+(42, 1, '2013-09-17 15:24:03', '2013-09-17 15:24:03', '[calendar]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 15:24:03', '2013-09-17 15:24:03', '', 18, 'http://localhost/semine/?p=42', 0, 'revision', '', 0),
+(43, 1, '2013-09-17 15:25:03', '2013-09-17 15:25:03', '[calendar]\r\n[eventlist]', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 15:25:03', '2013-09-17 15:25:03', '', 18, 'http://localhost/semine/?p=43', 0, 'revision', '', 0),
+(44, 1, '2013-09-17 15:26:03', '2013-09-17 15:26:03', '{EVRREGIS}', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 15:26:03', '2013-09-17 15:26:03', '', 18, 'http://localhost/semine/?p=44', 0, 'revision', '', 0),
+(45, 1, '2013-09-17 15:29:56', '2013-09-17 15:29:56', 'CONTENTS', 'Eventos', 'CONTENTS', 'publish', 'open', 'open', '', 'eventos', '', '', '2013-09-17 15:29:56', '2013-09-17 15:29:56', '', 0, 'http://localhost/semine/?page_id=45', 0, 'page', '', 0),
+(46, 1, '2013-09-17 15:29:56', '2013-09-17 15:29:56', 'CONTENTS', 'Locais', '', 'publish', 'open', 'open', '', 'locais', '', '', '2013-09-17 15:29:56', '2013-09-17 15:29:56', '', 45, 'http://localhost/semine/?page_id=46', 0, 'page', '', 0),
+(47, 1, '2013-09-17 15:29:57', '2013-09-17 15:29:57', 'CONTENTS', 'Categorias', '', 'publish', 'open', 'open', '', 'categorias', '', '', '2013-09-17 15:29:57', '2013-09-17 15:29:57', '', 45, 'http://localhost/semine/?page_id=47', 0, 'page', '', 0),
+(48, 1, '2013-09-17 15:29:57', '2013-09-17 15:29:57', 'CONTENTS', 'Tags', '', 'publish', 'open', 'open', '', 'tags', '', '', '2013-09-17 15:29:57', '2013-09-17 15:29:57', '', 45, 'http://localhost/semine/?page_id=48', 0, 'page', '', 0),
+(49, 1, '2013-09-17 15:29:57', '2013-09-17 15:29:57', 'CONTENTS', 'Minhas Reservas', '', 'publish', 'open', 'open', '', 'minhas-reservas', '', '', '2013-09-17 15:29:57', '2013-09-17 15:29:57', '', 45, 'http://localhost/semine/?page_id=49', 0, 'page', '', 0),
+(50, 1, '2013-09-17 15:38:16', '2013-09-17 15:38:16', '', 'Semine', '', 'publish', 'open', 'open', '', 'semine', '', '', '2013-09-17 15:38:16', '2013-09-17 15:38:16', '', 0, 'http://localhost/semine/?post_type=event&#038;p=50', 0, 'event', '', 0),
+(51, 1, '2013-09-17 15:45:48', '2013-09-17 15:45:48', '', 'Inscrição', '', 'inherit', 'open', 'open', '', '18-revision-v1', '', '', '2013-09-17 15:45:48', '2013-09-17 15:45:48', '', 18, 'http://localhost/semine/?p=51', 0, 'revision', '', 0);
 
 -- --------------------------------------------------------
 
@@ -857,7 +1461,7 @@ CREATE TABLE IF NOT EXISTS `wp_usermeta` (
   PRIMARY KEY (`umeta_id`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
 
 --
 -- Extraindo dados da tabela `wp_usermeta`
@@ -911,7 +1515,8 @@ INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALU
 (45, 3, 'show_admin_bar_front', 'true'),
 (46, 3, 'wp_capabilities', 'a:1:{s:6:"editor";b:1;}'),
 (47, 3, 'wp_user_level', '7'),
-(48, 3, 'dismissed_wp_pointers', 'wp330_toolbar,wp330_saving_widgets,wp340_choose_image_from_library,wp340_customize_current_theme_link,wp350_media,wp360_revisions,wp360_locks');
+(48, 3, 'dismissed_wp_pointers', 'wp330_toolbar,wp330_saving_widgets,wp340_choose_image_from_library,wp340_customize_current_theme_link,wp350_media,wp360_revisions,wp360_locks'),
+(49, 1, 'manageedit-eventcolumnshidden', 'a:1:{i:0;s:8:"event-id";}');
 
 -- --------------------------------------------------------
 
