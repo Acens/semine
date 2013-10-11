@@ -169,7 +169,7 @@ padding: 78px 0 70px;
 
 	body.home.blog #top-area, body.et_default_homepage #top-area { position: absolute; width: 100%; z-index: 100; background: none !important; }
 		.top-content { padding-top: 50px; }
-			#logo { float: left; margin-right: 10px; }
+			#logo { float: left }
 			#menu-wrap { float: right; padding-top: 27px; }
 
 			#social-icons, #top-menu { float: left; }
