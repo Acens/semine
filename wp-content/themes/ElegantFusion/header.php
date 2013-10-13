@@ -36,7 +36,7 @@
 <body <?php body_class(); ?>>
 	<?php do_action( 'et_header_top' ); ?>
 	<header id="main-header">
-		<div id="top-area">
+		<div id="tarea" class="paddingtb20">
 			<div class="top-content container clearfix">
 				<?php $logo = ( $user_logo = et_get_option( 'fusion_logo' ) ) && '' != $user_logo ? $user_logo : $template_directory_uri . '/images/logo.png'; ?>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo esc_attr( $logo ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" id="logo"/></a>

@@ -13,6 +13,7 @@
 			
 			
 			<p id="copyright">
+			<span>Desenvolvido por </span>	
 			<a href="http://www.acens.com.br" title="Desenvolvido por Acens">
 				<img src="http://localhost/semine/wp-content/uploads/2013/08/logo-pequena.png" alt="Acens Empresa Júnior" />
 			</a>

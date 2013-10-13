@@ -9,7 +9,8 @@
 
 <?php if ( 'on' == et_get_option( 'fusion_display_services', 'false' ) ) : ?>
 <div id="services">
-	<div class="container clearfix">
+	<div class="container-fluid clearfix">
+		<div class="row-fluid">
 	<?php
 		$blurbs_number = (int) apply_filters( 'et_blurbs_number', 3 );
 		for ( $i = 1; $i <= $blurbs_number; $i++ ){
@@ -20,7 +21,7 @@
 				$page_title = ( $blurb_custom_title = get_post_meta( get_the_ID(), 'Blurbtitle', true ) ) && '' != $blurb_custom_title ? $blurb_custom_title : apply_filters( 'the_title', get_the_title() );
 				$page_permalink = ( $blurb_custom_permalink = get_post_meta( get_the_ID(), 'Blurblink', true ) ) && '' != $blurb_custom_permalink ? $blurb_custom_permalink : get_permalink();
 
-				echo '<div class="service' . ( 1 == $i ? ' first' : '' ) . ( $blurbs_number == $i ? ' last' : '' ) . '">';
+				echo '<div class="service span4">';
 					if ( ( $page_icon = get_post_meta( get_the_ID(), 'Icon', true ) ) && '' != $page_icon )
 						printf( '<img src="%1$s" alt="%2$s" class="icon" />', esc_attr( $page_icon ), esc_attr( $page_title ) );
 
@@ -39,6 +40,7 @@
 			wp_reset_postdata();
 		}
 	?>
+	</div>
 	</div> <!-- end .container -->
 </div> <!-- end #services -->
 <?php endif; // 'on' == et_get_option( 'fusion_display_blurbs', 'false' ) ?>
