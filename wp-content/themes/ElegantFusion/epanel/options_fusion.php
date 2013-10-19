@@ -397,6 +397,52 @@ $options = array (
 				   "validation_type" => "nohtml"
 			),
 
+			array( "name" => esc_html__("5rd Logo Image",$themename),
+				   "id" => $shortname."_logo_path_5",
+				   "type" => "upload",
+				   "std" => "",
+				   "desc" => esc_html__("Here you can upload the client logo image.",$themename)
+			),
+
+			array( "name" => esc_html__("5rd Logo Url",$themename),
+                   "id" => $shortname."_logo_url_5",
+                   "std" => '',
+                   "type" => "text",
+				   "desc" => esc_html__("Place the client logo url here. ",$themename),
+				   "validation_type" => "url"
+			),
+
+			array( "name" => esc_html__("5rd Logo Alt",$themename),
+                   "id" => $shortname."_logo_alt_5",
+                   "std" => '',
+                   "type" => "text",
+				   "desc" => esc_html__("Place the client logo description here. ",$themename),
+				   "validation_type" => "nohtml"
+			),
+
+			array( "name" => esc_html__("6rd Logo Image",$themename),
+				   "id" => $shortname."_logo_path_6",
+				   "type" => "upload",
+				   "std" => "",
+				   "desc" => esc_html__("Here you can upload the client logo image.",$themename)
+			),
+
+			array( "name" => esc_html__("6rd Logo Url",$themename),
+                   "id" => $shortname."_logo_url_6",
+                   "std" => '',
+                   "type" => "text",
+				   "desc" => esc_html__("Place the client logo url here. ",$themename),
+				   "validation_type" => "url"
+			),
+
+			array( "name" => esc_html__("6rd Logo Alt",$themename),
+                   "id" => $shortname."_logo_alt_6",
+                   "std" => '',
+                   "type" => "text",
+				   "desc" => esc_html__("Place the client logo description here. ",$themename),
+				   "validation_type" => "nohtml"
+			),
+
 		array( "name" => "general-2",
 			   "type" => "subcontent-end",),
 

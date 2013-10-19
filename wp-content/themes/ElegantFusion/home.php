@@ -140,8 +140,9 @@ if ( 'on' == et_get_option( 'fusion_show_testimonials', 'false' ) ) {
 <?php if ( 'on' == et_get_option( 'fusion_show_logos', 'false' ) ) { ?>
 <div id="logos">
 	<div class="container">
+	<h2><?php esc_html_e( 'Parceiros:', 'Fusion' ); ?></h2>
 	<?php
-		$logos_number = (int) apply_filters( 'et_logos_number', 4 );
+		$logos_number = (int) apply_filters( 'et_logos_number', 6 );
 		for ( $i = 1; $i <= $logos_number; $i++ ) {
 			if ( ( $logo_path = et_get_option( 'fusion_logo_path_' . $i ) ) && '' != $logo_path )
 				printf( '<a href="%s"><img src="%s" alt="%s"/></a>',
