@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: ElegantFusion v1.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-08-30 15:54:56+0000\n"
+"PO-Revision-Date: 2013-10-19 13:36:49+0000\n"
 "Last-Translator: inova <jeovania@acens.com.br>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr "Enviar comentário"
 #: comments.php:54
 #@ Fusion
 msgid "Post a Reply"
-msgstr ""
+msgstr "Poste uma resposta"
 
 #: comments.php:54
 #, php-format
@@ -86,7 +86,7 @@ msgstr ""
 #: page-template-portfolio.php:49
 #@ Fusion
 msgid "0 comments"
-msgstr ""
+msgstr "0 comentários"
 
 #: content.php:25
 #: includes/entry.php:16
@@ -100,7 +100,7 @@ msgstr ""
 #: page-template-portfolio.php:49
 #@ Fusion
 msgid "1 comment"
-msgstr ""
+msgstr "1 comentário"
 
 #: content.php:25
 #: includes/entry.php:16
@@ -114,7 +114,7 @@ msgstr ""
 #: page-template-portfolio.php:49
 #@ Fusion
 msgid "comments"
-msgstr ""
+msgstr "comentários"
 
 #: content.php:38
 #: image.php:59
@@ -127,13 +127,13 @@ msgstr ""
 #: page-template-portfolio.php:62
 #@ Fusion
 msgid "Pages:"
-msgstr ""
+msgstr "Páginas:"
 
 #: epanel/core_functions.php:26
 #: epanel/core_functions.php:389
 #@ Fusion
 msgid "Saving..."
-msgstr ""
+msgstr "Salvando..."
 
 #: epanel/core_functions.php:27
 #@ Fusion
@@ -1972,7 +1972,7 @@ msgstr "Leia mais"
 #: home.php:94
 #@ Fusion
 msgid "Recent News"
-msgstr ""
+msgstr "Notícias"
 
 #: home.php:118
 #, php-format
